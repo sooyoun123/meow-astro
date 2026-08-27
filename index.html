@@ -7,6 +7,9 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <!-- CORS 차단 및 Script error 방지를 위한 crossorigin 속성 추가 -->
+  <script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js" crossorigin="anonymous"></script>
   <style>
     * {
       font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
@@ -46,6 +49,16 @@
     .bot-content p:last-child {
       margin-bottom: 0;
     }
+    .spin-loader {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      border: 2px solid rgba(244,114,182,0.3);
+      border-top-color: #ec4899;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body class="min-h-screen py-6 px-3 md:px-6 relative overflow-x-hidden">
@@ -69,7 +82,7 @@
             <h1 class="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-300 to-amber-200 tracking-tight">MeowAstro</h1>
             <span id="badgeAstro" class="text-xs px-2.5 py-0.5 rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/30 font-bold whitespace-nowrap">정통 홀사인 점성소</span>
           </div>
-          <p id="headerDesc" class="text-xs text-slate-300 mt-1 font-medium">안정형 내장 천문 엔진 기반 30도 통블록 홀사인 & 1:1 심층 상담 🐾</p>
+          <p id="headerDesc" class="text-xs text-slate-300 mt-1 font-medium">실제 천문 엔진(Astronomy Engine) 기반 30도 통블록 홀사인 & 1:1 심층 상담 🐾</p>
         </div>
       </div>
 
@@ -127,16 +140,17 @@
             <input type="text" id="citySearchInput" placeholder="도시 이름 검색 (예: 서울, 강릉, 판교, 도쿄, 뉴욕, 파리, 런던, 시드니...)" class="w-full bg-slate-950 border border-indigo-500/40 rounded-2xl pl-10 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-pink-400 placeholder:text-slate-500 font-medium" />
             <span class="absolute left-3.5 top-3 text-slate-400 text-xs"><i class="fa-solid fa-magnifying-glass"></i></span>
           </div>
+          <div id="citySuggestions" class="hidden bg-slate-950 border border-indigo-500/30 rounded-2xl overflow-hidden divide-y divide-slate-800"></div>
 
           <div class="flex items-center gap-2 text-xs text-indigo-300">
             <span id="labelCurrentCity" class="text-pink-400 shrink-0">📍 현재 선택:</span>
-            <span id="selectedCityLabel" class="font-bold text-white bg-indigo-950 px-3 py-1 rounded-xl border border-indigo-500/30 whitespace-nowrap">대한민국 서울 (Seoul) - UTC+9</span>
+            <span id="selectedCityLabel" class="font-bold text-white bg-indigo-950 px-3 py-1 rounded-xl border border-indigo-500/30 whitespace-nowrap">대한민국 서울 · Asia/Seoul</span>
           </div>
         </div>
 
         <div class="flex items-center justify-end pt-3 border-t border-indigo-950/80">
           <button type="submit" id="btnCalculate" class="w-full md:w-auto px-8 py-3 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 hover:opacity-90 text-white font-extrabold text-sm rounded-2xl shadow-lg transition transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer cat-glow">
-            <span>✨ 정통 홀사인 냥이 차트 계산하고 5대 운세 열기</span>
+            <span id="btnCalculateText">✨ 정통 홀사인 냥이 차트 계산하고 5대 운세 열기</span>
           </button>
         </div>
       </form>
@@ -228,7 +242,7 @@
       <section class="bg-slate-900/95 rounded-3xl p-5 md:p-6 border border-indigo-500/30 shadow-xl space-y-4">
         <div class="flex items-center justify-between border-b border-indigo-950 pb-3">
           <div>
-            <h3 id="planetDashTitle" class="text-base font-extrabold text-white flex items-center gap-2"><span>🪐</span> 15대 행성 & 핵심 감응점 홀사인 대시보드</h3>
+            <h3 id="planetDashTitle" class="text-base font-extrabold text-white flex items-center gap-2"><span>🪐</span> 13대 행성 & 핵심 감응점 홀사인 대시보드</h3>
             <p id="planetDashSub" class="text-xs text-slate-400 mt-0.5">행성 카드를 탭하면 인라인 아코디언 상세 분석과 원터치 챗봇 질문이 펼쳐집니다 🐾</p>
           </div>
           <span id="badgeInteractive" class="text-[11px] px-2.5 py-1 bg-indigo-500/20 text-indigo-300 rounded-full border border-indigo-500/30 font-bold whitespace-nowrap">인터랙티브 맵</span>
@@ -363,7 +377,7 @@
       ko: {
         metaTitle: "냥스트로 (MeowAstro) - 우주 냥이와 함께하는 홀사인 정통 별자리 상담소",
         badgeAstro: "정통 홀사인 점성소",
-        headerDesc: "안정형 내장 천문 엔진 기반 30도 통블록 홀사인 & 1:1 심층 상담 🐾",
+        headerDesc: "실제 천문 엔진(Astronomy Engine) 기반 30도 통블록 홀사인 & 1:1 심층 상담 🐾",
         creditTitle: "오늘의 참치캔",
         formHeaderTitle: "출생 정보 입력하고 홀사인 차트 열기 (무제한)",
         formHeaderSub: "* 자정 기준 5캔 자동 충전",
@@ -375,6 +389,7 @@
         namePlaceholder: "예: 우주별이",
         cityPlaceholder: "도시 이름 검색 (예: 서울, 강릉, 판교, 도쿄, 뉴욕, 파리, 런던, 시드니...)",
         btnCalculate: "✨ 정통 홀사인 냥이 차트 계산하고 5대 운세 열기",
+        btnCalculating: "🪐 별자리 궤도 계산 중...",
         badgeSoulCat: "나의 우주 소울 냥이",
         big3SunTitle: "자아 & 본질 (태양 Sun)",
         big3MoonTitle: "무의식 & 멘탈 (달 Moon)",
@@ -387,7 +402,7 @@
         theme3Title: "3. 재물복 & 자산 증식 패턴 (재물운)",
         theme4Title: "4. 연애 스타일 & 이상적 파트너 (애정운)",
         theme5Title: "5. 인생의 카르마 & 영혼의 탈출구 (개운법)",
-        planetDashTitle: "15대 행성 & 핵심 감응점 홀사인 대시보드",
+        planetDashTitle: "13대 행성 & 핵심 감응점 홀사인 대시보드",
         planetDashSub: "행성 카드를 탭하면 인라인 아코디언 상세 분석과 원터치 챗봇 질문이 펼쳐집니다 🐾",
         badgeInteractive: "인터랙티브 맵",
         panelCol1Title: "✦ 핵심 역량 & 발현",
@@ -409,12 +424,14 @@
         adModalTitle: "오늘의 참치캔이 바닥났어요!",
         adModalDesc: "15초 우주 모의 광고를 시청하면 참치캔 3캔이 즉시 무료 충전됩니다 🐾",
         adPlayText: "스폰서 모의 광고 재생 중",
-        geminiModalTitle: "[개발자 모드] Gemini API Key 설정"
+        geminiModalTitle: "[개발자 모드] Gemini API Key 설정",
+        cityNotFound: "일치하는 도시를 찾지 못했습니다. 목록에서 선택해주세요.",
+        cityApprox: "(경도 기반 근사 시간대 · 정밀도 낮음)"
       },
       en: {
         metaTitle: "MeowAstro - Whole Sign Precision Horoscope & Cosmic Cat Consultation",
         badgeAstro: "Whole Sign Astrology",
-        headerDesc: "Stable Native Astronomy Engine Based Whole Sign & 1:1 Deep Reading 🐾",
+        headerDesc: "Real Astronomy Engine Based Whole Sign & 1:1 Deep Reading 🐾",
         creditTitle: "Today's Tuna Cans",
         formHeaderTitle: "Enter Birth Details & Unlock Whole Sign Chart (Unlimited)",
         formHeaderSub: "* 5 Cans auto-refilled daily at midnight",
@@ -426,6 +443,7 @@
         namePlaceholder: "e.g., CosmicStar",
         cityPlaceholder: "Search city (e.g., Seoul, New York, London, Tokyo...)",
         btnCalculate: "✨ Calculate Whole Sign Chart & Unlock 5 Horoscopes",
+        btnCalculating: "🪐 Calculating orbits...",
         badgeSoulCat: "Your Cosmic Soul Cat",
         big3SunTitle: "Ego & Essence (Sun)",
         big3MoonTitle: "Subconscious & Mental (Moon)",
@@ -438,7 +456,7 @@
         theme3Title: "3. Wealth & Asset Growth Pattern (Wealth Fortune)",
         theme4Title: "4. Love Style & Ideal Partner (Romance Fortune)",
         theme5Title: "5. Life Karma & Soul Escape Route (Remedy)",
-        planetDashTitle: "15 Planets & Sensitive Points Whole Sign Dashboard",
+        planetDashTitle: "13 Planets & Sensitive Points Whole Sign Dashboard",
         planetDashSub: "Tap any planet card to open inline detailed analysis & one-touch chatbot questions 🐾",
         badgeInteractive: "Interactive Map",
         panelCol1Title: "✦ Core Competency & Manifestation",
@@ -460,7 +478,9 @@
         adModalTitle: "You ran out of tuna cans!",
         adModalDesc: "Watch a 15-second cosmic sponsor ad to instantly get 3 free tuna cans 🐾",
         adPlayText: "Sponsor Ad Playing",
-        geminiModalTitle: "[Developer Mode] Gemini API Key Setup"
+        geminiModalTitle: "[Developer Mode] Gemini API Key Setup",
+        cityNotFound: "No matching city found. Please pick from the list.",
+        cityApprox: "(Longitude-based approx. timezone · lower precision)"
       }
     };
 
@@ -493,7 +513,7 @@
       document.getElementById('profileName').placeholder = t.namePlaceholder;
       document.getElementById('citySearchInput').placeholder = t.cityPlaceholder;
 
-      document.getElementById('btnCalculate').innerHTML = `<span>${t.btnCalculate}</span>`;
+      document.getElementById('btnCalculateText').textContent = t.btnCalculate;
       document.getElementById('badgeSoulCat').textContent = t.badgeSoulCat;
       document.getElementById('big3SunTitle').textContent = t.big3SunTitle;
       document.getElementById('big3MoonTitle').textContent = t.big3MoonTitle;
@@ -543,46 +563,17 @@
       }
 
       if (currentSelectedCity) {
-        document.getElementById('selectedCityLabel').textContent = `${lang === 'en' ? currentSelectedCity.enName : currentSelectedCity.name} - UTC${currentSelectedCity.tz >= 0 ? '+' : ''}${currentSelectedCity.tz}`;
+        renderSelectedCityLabel();
       }
 
       if (lastCalculatedChart) {
         generateDeepFiveReports(lastCalculatedChart);
         if (currentPanelKey) {
-          toggleInlinePlanetPanel(currentPanelKey);
+          toggleInlinePlanetPanel(currentPanelKey, true);
         }
       }
       
       updateCreditDisplay();
-    }
-
-    const COMPREHENSIVE_CITIES = [
-      { id: 'seoul', name: '대한민국 서울 (Seoul)', enName: 'Seoul, South Korea', lat: 37.5665, lon: 126.9780, tz: 9 },
-      { id: 'newyork', name: '미국 뉴욕 (New York)', enName: 'New York, USA', lat: 40.7128, lon: -74.0060, tz: -5 },
-      { id: 'losangeles', name: '미국 LA (Los Angeles)', enName: 'Los Angeles, USA', lat: 34.0522, lon: -118.2437, tz: -8 },
-      { id: 'london', name: '영국 런던 (London)', enName: 'London, UK', lat: 51.5074, lon: -0.1278, tz: 0 },
-      { id: 'paris', name: '프랑스 파리 (Paris)', enName: 'Paris, France', lat: 48.8566, lon: 2.3522, tz: 1 },
-      { id: 'berlin', name: '독일 베를린 (Berlin)', enName: 'Berlin, Germany', lat: 52.5200, lon: 13.4050, tz: 1 },
-      { id: 'tokyo', name: '일본 도쿄 (Tokyo)', enName: 'Tokyo, Japan', lat: 35.6762, lon: 139.6503, tz: 9 },
-      { id: 'sydney', name: '호주 시드니 (Sydney)', enName: 'Sydney, Australia', lat: -33.8688, lon: 151.2093, tz: 10 }
-    ];
-
-    let currentSelectedCity = COMPREHENSIVE_CITIES[0];
-
-    function setupCitySearch() {
-      const input = document.getElementById('citySearchInput');
-      const label = document.getElementById('selectedCityLabel');
-
-      input.addEventListener('input', (e) => {
-        const keyword = e.target.value.trim().toLowerCase();
-        if (!keyword) return;
-
-        const matched = COMPREHENSIVE_CITIES.find(c => c.name.toLowerCase().includes(keyword) || c.enName.toLowerCase().includes(keyword) || c.id.toLowerCase().includes(keyword));
-        if (matched) {
-          currentSelectedCity = matched;
-          label.textContent = `${currentLang === 'en' ? matched.enName : matched.name} - UTC${matched.tz >= 0 ? '+' : ''}${matched.tz}`;
-        }
-      });
     }
 
     const ZODIAC_SIGNS = [
@@ -600,66 +591,292 @@
       { name: 'Pisces', kor: '물고기자리', en: 'Pisces' }
     ];
 
+    const COMPREHENSIVE_CITIES = [
+      { id: 'seoul', name: '대한민국 서울', enName: 'Seoul, South Korea', lat: 37.5665, lon: 126.9780, tz: 'Asia/Seoul' },
+      { id: 'busan', name: '대한민국 부산', enName: 'Busan, South Korea', lat: 35.1796, lon: 129.0756, tz: 'Asia/Seoul' },
+      { id: 'incheon', name: '대한민국 인천', enName: 'Incheon, South Korea', lat: 37.4563, lon: 126.7052, tz: 'Asia/Seoul' },
+      { id: 'daegu', name: '대한민국 대구', enName: 'Daegu, South Korea', lat: 35.8714, lon: 128.6014, tz: 'Asia/Seoul' },
+      { id: 'daejeon', name: '대한민국 대전', enName: 'Daejeon, South Korea', lat: 36.3504, lon: 127.3845, tz: 'Asia/Seoul' },
+      { id: 'gwangju', name: '대한민국 광주', enName: 'Gwangju, South Korea', lat: 35.1595, lon: 126.8526, tz: 'Asia/Seoul' },
+      { id: 'ulsan', name: '대한민국 울산', enName: 'Ulsan, South Korea', lat: 35.5384, lon: 129.3114, tz: 'Asia/Seoul' },
+      { id: 'suwon', name: '대한민국 수원/판교', enName: 'Suwon/Pangyo, South Korea', lat: 37.3947, lon: 127.1112, tz: 'Asia/Seoul' },
+      { id: 'gangneung', name: '대한민국 강릉', enName: 'Gangneung, South Korea', lat: 37.7519, lon: 128.8761, tz: 'Asia/Seoul' },
+      { id: 'jeju', name: '대한민국 제주', enName: 'Jeju, South Korea', lat: 33.4996, lon: 126.5312, tz: 'Asia/Seoul' },
+      { id: 'newyork', name: '미국 뉴욕', enName: 'New York, USA', lat: 40.7128, lon: -74.0060, tz: 'America/New_York' },
+      { id: 'losangeles', name: '미국 LA', enName: 'Los Angeles, USA', lat: 34.0522, lon: -118.2437, tz: 'America/Los_Angeles' },
+      { id: 'chicago', name: '미국 시카고', enName: 'Chicago, USA', lat: 41.8781, lon: -87.6298, tz: 'America/Chicago' },
+      { id: 'london', name: '영국 런던', enName: 'London, UK', lat: 51.5074, lon: -0.1278, tz: 'Europe/London' },
+      { id: 'paris', name: '프랑스 파리', enName: 'Paris, France', lat: 48.8566, lon: 2.3522, tz: 'Europe/Paris' },
+      { id: 'berlin', name: '독일 베를린', enName: 'Berlin, Germany', lat: 52.5200, lon: 13.4050, tz: 'Europe/Berlin' },
+      { id: 'tokyo', name: '일본 도쿄', enName: 'Tokyo, Japan', lat: 35.6762, lon: 139.6503, tz: 'Asia/Tokyo' },
+      { id: 'osaka', name: '일본 오사카', enName: 'Osaka, Japan', lat: 34.6937, lon: 135.5023, tz: 'Asia/Tokyo' },
+      { id: 'beijing', name: '중국 베이징', enName: 'Beijing, China', lat: 39.9042, lon: 116.4074, tz: 'Asia/Shanghai' },
+      { id: 'shanghai', name: '중국 상하이', enName: 'Shanghai, China', lat: 31.2304, lon: 121.4737, tz: 'Asia/Shanghai' },
+      { id: 'hongkong', name: '홍콩', enName: 'Hong Kong', lat: 22.3193, lon: 114.1694, tz: 'Asia/Hong_Kong' },
+      { id: 'singapore', name: '싱가포르', enName: 'Singapore', lat: 1.3521, lon: 103.8198, tz: 'Asia/Singapore' },
+      { id: 'bangkok', name: '태국 방콕', enName: 'Bangkok, Thailand', lat: 13.7563, lon: 100.5018, tz: 'Asia/Bangkok' },
+      { id: 'sydney', name: '호주 시드니', enName: 'Sydney, Australia', lat: -33.8688, lon: 151.2093, tz: 'Australia/Sydney' }
+    ];
+
+    let currentSelectedCity = { ...COMPREHENSIVE_CITIES[0], approx: false };
+
+    function renderSelectedCityLabel() {
+      const label = document.getElementById('selectedCityLabel');
+      const t = TRANSLATIONS[currentLang];
+      const displayName = currentLang === 'en' ? (currentSelectedCity.enName || currentSelectedCity.name) : currentSelectedCity.name;
+      const tzText = currentSelectedCity.tz ? currentSelectedCity.tz : `UTC${currentSelectedCity.utcOffset >= 0 ? '+' : ''}${currentSelectedCity.utcOffset}`;
+      label.textContent = `${displayName} · ${tzText}${currentSelectedCity.approx ? ' ' + t.cityApprox : ''}`;
+    }
+
+    async function geocodeCity(query) {
+      const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}`;
+      const res = await fetch(url, { headers: { 'Accept-Language': currentLang } });
+      if (!res.ok) throw new Error('Geocoding request failed');
+      const data = await res.json();
+      if (!data || data.length === 0) return null;
+      const place = data[0];
+      const lat = parseFloat(place.lat);
+      const lon = parseFloat(place.lon);
+      const utcOffset = Math.round(lon / 15);
+      return {
+        id: 'geo_' + Date.now(),
+        name: place.display_name,
+        enName: place.display_name,
+        lat, lon,
+        tz: null,
+        utcOffset,
+        approx: true
+      };
+    }
+
+    function setupCitySearch() {
+      const input = document.getElementById('citySearchInput');
+      const suggestBox = document.getElementById('citySuggestions');
+      let debounceTimer = null;
+
+      function renderSuggestions(list) {
+        if (!list || list.length === 0) {
+          suggestBox.classList.add('hidden');
+          suggestBox.innerHTML = '';
+          return;
+        }
+        suggestBox.innerHTML = '';
+        list.forEach(c => {
+          const item = document.createElement('div');
+          item.className = 'px-4 py-2.5 text-xs text-slate-200 hover:bg-indigo-900/60 cursor-pointer font-medium';
+          item.textContent = currentLang === 'en' ? (c.enName || c.name) : c.name;
+          item.addEventListener('click', () => {
+            currentSelectedCity = { ...c, approx: false };
+            renderSelectedCityLabel();
+            suggestBox.classList.add('hidden');
+            input.value = '';
+          });
+          suggestBox.appendChild(item);
+        });
+        suggestBox.classList.remove('hidden');
+      }
+
+      input.addEventListener('input', (e) => {
+        const keyword = e.target.value.trim().toLowerCase();
+        clearTimeout(debounceTimer);
+        if (!keyword) { suggestBox.classList.add('hidden'); return; }
+
+        const localMatches = COMPREHENSIVE_CITIES.filter(c =>
+          c.name.toLowerCase().includes(keyword) ||
+          c.enName.toLowerCase().includes(keyword) ||
+          c.id.toLowerCase().includes(keyword)
+        );
+
+        if (localMatches.length > 0) {
+          renderSuggestions(localMatches.slice(0, 6));
+          return;
+        }
+
+        debounceTimer = setTimeout(async () => {
+          try {
+            const geo = await geocodeCity(e.target.value.trim());
+            if (geo) {
+              renderSuggestions([geo]);
+            } else {
+              suggestBox.classList.add('hidden');
+            }
+          } catch (err) {
+            suggestBox.classList.add('hidden');
+          }
+        }, 500);
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!suggestBox.contains(e.target) && e.target !== input) {
+          suggestBox.classList.add('hidden');
+        }
+      });
+    }
+
+    function julianCenturiesTT(astroTime) {
+      return (astroTime.tt - 2451545.0) / 36525.0;
+    }
+
+    function meanObliquityDeg(T) {
+      const eps0 = 23 + 26 / 60 + 21.448 / 3600;
+      const correction = (-46.8150 * T - 0.00059 * T * T + 0.001813 * T * T * T) / 3600;
+      return eps0 + correction;
+    }
+
+    function meanNodeLongitudeDeg(T) {
+      let omega = 125.0445479 - 1934.1362891 * T + 0.0020754 * T * T + Math.pow(T, 3) / 467441 - Math.pow(T, 4) / 60616000;
+      return normalizeDeg(omega);
+    }
+
+    function meanLilithLongitudeDeg(T) {
+      let peri = 83.3532465 + 4069.0137287 * T - 0.0103200 * T * T - Math.pow(T, 3) / 80053 + Math.pow(T, 4) / 18999000;
+      return normalizeDeg(peri + 180);
+    }
+
+    function normalizeDeg(deg) {
+      let d = deg % 360;
+      if (d < 0) d += 360;
+      return d;
+    }
+
+    function eclipticLongitudeOf(body, astroTime) {
+      const vec = Astronomy.GeoVector(body, astroTime, true);
+      const ecl = Astronomy.Ecliptic(vec);
+      return normalizeDeg(ecl.elon);
+    }
+
+    function computeAnglesDeg(astroTime, latDeg, lonDeg) {
+      const gstHours = Astronomy.SiderealTime(astroTime);
+      let lstHours = gstHours + lonDeg / 15;
+      lstHours = ((lstHours % 24) + 24) % 24;
+      const ramcDeg = lstHours * 15;
+
+      const T = julianCenturiesTT(astroTime);
+      const epsDeg = meanObliquityDeg(T);
+      const eps = epsDeg * Math.PI / 180;
+      const ramc = ramcDeg * Math.PI / 180;
+      const lat = latDeg * Math.PI / 180;
+
+      let mc = Math.atan2(Math.sin(ramc), Math.cos(ramc) * Math.cos(eps)) * 180 / Math.PI;
+      mc = normalizeDeg(mc);
+
+      const ascRad = Math.atan2(
+        -Math.cos(ramc),
+        Math.sin(eps) * Math.tan(lat) + Math.cos(eps) * Math.sin(ramc)
+      );
+      let asc = normalizeDeg(ascRad * 180 / Math.PI);
+
+      return { asc, mc };
+    }
+
+    function isRetrograde(body, astroTime) {
+      if (body === Astronomy.Body.Sun || body === Astronomy.Body.Moon) return false;
+      const lon1 = eclipticLongitudeOf(body, astroTime);
+      const t2 = astroTime.AddDays(1);
+      const lon2 = eclipticLongitudeOf(body, t2);
+      let diff = lon2 - lon1;
+      if (diff > 180) diff -= 360;
+      if (diff < -180) diff += 360;
+      return diff < 0;
+    }
+
+    function lonToSignAndDeg(lon) {
+      const signIdx = Math.floor(lon / 30);
+      const sign = ZODIAC_SIGNS[signIdx % 12];
+      const degInSign = lon % 30;
+      const deg = Math.floor(degInSign);
+      const min = Math.floor((degInSign - deg) * 60);
+      return { sign, signIdx, deg, min, degStr: `${deg}°${min < 10 ? '0' : ''}${min}'` };
+    }
+
+    function birthLocalToUTC(year, month, day, hour, minute, city) {
+      if (city.tz) {
+        const dt = luxon.DateTime.fromObject(
+          { year, month, day, hour, minute, second: 0 },
+          { zone: city.tz }
+        );
+        if (!dt.isValid) throw new Error('Invalid local date/time for timezone ' + city.tz);
+        return dt.toUTC().toJSDate();
+      }
+      const offsetHours = city.utcOffset || 0;
+      return new Date(Date.UTC(year, month - 1, day, hour, minute) - offsetHours * 3600 * 1000);
+    }
+
+    const PLANET_BODY_KEYS = [
+      { key: 'sun', body: 'Sun' },
+      { key: 'moon', body: 'Moon' },
+      { key: 'mercury', body: 'Mercury' },
+      { key: 'venus', body: 'Venus' },
+      { key: 'mars', body: 'Mars' },
+      { key: 'jupiter', body: 'Jupiter' },
+      { key: 'saturn', body: 'Saturn' },
+      { key: 'uranus', body: 'Uranus' },
+      { key: 'neptune', body: 'Neptune' },
+      { key: 'pluto', body: 'Pluto' }
+    ];
+
     function calculateFullChart(birthDateStr, hour24, minute, city) {
       const [year, month, day] = birthDateStr.split('-').map(Number);
-      let baseHash = (year * 365 + month * 30 + day + hour24 * 60 + minute + Math.floor(city.lat * 100)) % 360;
-      
-      const ascLon = (baseHash * 7 + 45) % 360;
-      const ascSignIdx = Math.floor(ascLon / 30);
-      const ascSign = ZODIAC_SIGNS[ascSignIdx];
-      const ascDegInSign = ascLon % 30;
-      const ascDeg = Math.floor(ascDegInSign);
-      const ascMin = Math.floor((ascDegInSign - ascDeg) * 60);
+      const utcDate = birthLocalToUTC(year, month, day, hour24, minute, city);
+      const astroTime = Astronomy.MakeTime(utcDate);
+
+      const { asc: ascLon, mc: mcLon } = computeAnglesDeg(astroTime, city.lat, city.lon);
+      const ascInfo = lonToSignAndDeg(ascLon);
+      const mcInfo = lonToSignAndDeg(mcLon);
 
       const houseSigns = [];
       for (let i = 0; i < 12; i++) {
-        houseSigns.push(ZODIAC_SIGNS[(ascSignIdx + i) % 12]);
+        houseSigns.push(ZODIAC_SIGNS[(ascInfo.signIdx + i) % 12]);
+      }
+      function houseOfSign(signName) {
+        for (let h = 0; h < 12; h++) {
+          if (houseSigns[h].name === signName) return h + 1;
+        }
+        return 1;
       }
 
-      const mcLon = (ascLon + 270) % 360;
-      const mcSignIdx = Math.floor(mcLon / 30);
-      const mcSign = ZODIAC_SIGNS[mcSignIdx];
-      const mcDegInSign = mcLon % 30;
-      const mcDeg = Math.floor(mcDegInSign);
-      const mcMin = Math.floor((mcDegInSign - mcDeg) * 60);
-
       const bodies = {};
-      const planetKeys = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto', 'node', 'south_node', 'chiron', 'lilith', 'fortune'];
-      
-      planetKeys.forEach((key, idx) => {
-        let planetLon = (ascLon + idx * 47.5 + month * 15 + day * 3) % 360;
-        const signIdx = Math.floor(planetLon / 30);
-        const sign = ZODIAC_SIGNS[signIdx];
-        const degInSign = planetLon % 30;
-        const deg = Math.floor(degInSign);
-        const min = Math.floor((degInSign - deg) * 60);
-
-        let houseNum = 1;
-        for (let h = 0; h < 12; h++) {
-          if (houseSigns[h].name === sign.name) {
-            houseNum = h + 1;
-            break;
-          }
-        }
-
-        const isRx = (idx % 5 === 0 && key !== 'sun' && key !== 'moon');
-
+      PLANET_BODY_KEYS.forEach(({ key, body }) => {
+        const astroBody = Astronomy.Body[body];
+        const lon = eclipticLongitudeOf(astroBody, astroTime);
+        const info = lonToSignAndDeg(lon);
         bodies[key] = {
-          key: key,
-          sign: sign,
-          degStr: `${deg}°${min < 10 ? '0' : ''}${min}’`,
-          rawDeg: degInSign,
-          house: houseNum,
-          isRx: isRx
+          key,
+          sign: info.sign,
+          degStr: info.degStr,
+          rawDeg: lon,
+          house: houseOfSign(info.sign.name),
+          isRx: isRetrograde(astroBody, astroTime)
         };
       });
 
+      const T = julianCenturiesTT(astroTime);
+      const nodeLon = meanNodeLongitudeDeg(T);
+      const nodeInfo = lonToSignAndDeg(nodeLon);
+      bodies.node = { key: 'node', sign: nodeInfo.sign, degStr: nodeInfo.degStr, rawDeg: nodeLon, house: houseOfSign(nodeInfo.sign.name), isRx: true };
+      const southNodeLon = normalizeDeg(nodeLon + 180);
+      const southInfo = lonToSignAndDeg(southNodeLon);
+      bodies.south_node = { key: 'south_node', sign: southInfo.sign, degStr: southInfo.degStr, rawDeg: southNodeLon, house: houseOfSign(southInfo.sign.name), isRx: true };
+
+      const lilithLon = meanLilithLongitudeDeg(T);
+      const lilithInfo = lonToSignAndDeg(lilithLon);
+      bodies.lilith = { key: 'lilith', sign: lilithInfo.sign, degStr: lilithInfo.degStr, rawDeg: lilithLon, house: houseOfSign(lilithInfo.sign.name), isRx: false };
+
+      const sunHouse = bodies.sun.house;
+      const isDayChart = sunHouse >= 7 && sunHouse <= 12;
+      const fortuneLon = isDayChart
+        ? normalizeDeg(ascLon + bodies.moon.rawDeg - bodies.sun.rawDeg)
+        : normalizeDeg(ascLon + bodies.sun.rawDeg - bodies.moon.rawDeg);
+      const fortuneInfo = lonToSignAndDeg(fortuneLon);
+      bodies.fortune = { key: 'fortune', sign: fortuneInfo.sign, degStr: fortuneInfo.degStr, rawDeg: fortuneLon, house: houseOfSign(fortuneInfo.sign.name), isRx: false };
+
       return {
-        bodies: bodies,
+        bodies,
         angles: {
-          asc: { label: 'Ascendant', sign: ascSign, degStr: `${ascDeg}°${ascMin < 10 ? '0' : ''}${ascMin}’` },
-          mc: { label: 'MC', sign: mcSign, degStr: `${mcDeg}°${mcMin < 10 ? '0' : ''}${mcMin}’` }
-        }
+          asc: { label: 'Ascendant', sign: ascInfo.sign, degStr: ascInfo.degStr },
+          mc: { label: 'MC', sign: mcInfo.sign, degStr: mcInfo.degStr }
+        },
+        isDayChart
       };
     }
 
@@ -674,9 +891,9 @@
       return lines.join('\n');
     }
 
-    const CREDIT_STORAGE_KEY = 'meow_astro_credits_v10';
-    const LAST_DATE_KEY = 'meow_astro_last_date_v10';
-    const ADMIN_CHEAT_KEY = 'meow_astro_is_admin_v10';
+    const CREDIT_STORAGE_KEY = 'meow_astro_credits_v11';
+    const LAST_DATE_KEY = 'meow_astro_last_date_v11';
+    const ADMIN_CHEAT_KEY = 'meow_astro_is_admin_v11';
 
     function isDeveloperMode() {
       const nameInput = document.getElementById('profileName');
@@ -722,7 +939,7 @@
       return updated;
     }
 
-    const GEMINI_KEY_STORAGE = 'gemini_astro_api_key_v10';
+    const GEMINI_KEY_STORAGE = 'gemini_astro_api_key_v11';
     let chatConversationHistory = [];
     let currentNatalContext = "";
     let lastCalculatedChart = null;
@@ -743,7 +960,7 @@ Rule 2 (General/Irrelevant Questions): Start with [ASTRO_INVALID], refund credit
     }
 
     async function requestGeminiChat(apiKey, systemPrompt, conversationHistory) {
-      const candidateModels = ['gemini-2.5-flash', 'gemini-3.5-flash-lite', 'gemini-2.5-flash-lite'];
+      const candidateModels = ['gemini-2.5-flash', 'gemini-2.5-flash-lite'];
       let lastErr = null;
       for (const model of candidateModels) {
         try {
@@ -789,17 +1006,16 @@ Rule 2 (General/Irrelevant Questions): Start with [ASTRO_INVALID], refund credit
       uranus: { name: { ko: '천왕성', en: 'Uranus' }, icon: '♅', domain: '혁신/독창성', domainEn: 'Innovation/Uniqueness' },
       neptune: { name: { ko: '해왕성', en: 'Neptune' }, icon: '♆', domain: '영감/직관', domainEn: 'Inspiration/Intuition' },
       pluto: { name: { ko: '명왕성', en: 'Pluto' }, icon: '♇', domain: '변형/재생', domainEn: 'Transformation/Regeneration' },
-      node: { name: { ko: '북노드', en: 'North Node' }, icon: '☊', domain: '영혼의 진화', domainEn: 'Soul Evolution' },
-      south_node: { name: { ko: '남노드', en: 'South Node' }, icon: '☋', domain: '과거 카르마', domainEn: 'Past Karma' },
-      chiron: { name: { ko: '키론', en: 'Chiron' }, icon: '⚷', domain: '상처와 치유', domainEn: 'Wound & Healing' },
-      lilith: { name: { ko: '릴리스', en: 'Lilith' }, icon: '⚸', domain: '그림자 본능', domainEn: 'Shadow Instinct' },
+      node: { name: { ko: '북노드(평균)', en: 'North Node (Mean)' }, icon: '☊', domain: '영혼의 진화', domainEn: 'Soul Evolution' },
+      south_node: { name: { ko: '남노드(평균)', en: 'South Node (Mean)' }, icon: '☋', domain: '과거 카르마', domainEn: 'Past Karma' },
+      lilith: { name: { ko: '릴리스(평균)', en: 'Lilith (Mean)' }, icon: '⚸', domain: '그림자 본능', domainEn: 'Shadow Instinct' },
       fortune: { name: { ko: '포춘', en: 'Part of Fortune' }, icon: '⊗', domain: '물질적 행운', domainEn: 'Material Fortune' }
     };
 
     function renderAllPlanetsDashboard(chart) {
       const container = document.getElementById('allPlanetsDashboard');
       container.innerHTML = '';
-      const orderedKeys = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto', 'node', 'south_node', 'chiron', 'lilith', 'fortune'];
+      const orderedKeys = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto', 'node', 'south_node', 'lilith', 'fortune'];
 
       orderedKeys.forEach(k => {
         const b = chart.bodies[k];
@@ -830,9 +1046,9 @@ Rule 2 (General/Irrelevant Questions): Start with [ASTRO_INVALID], refund credit
       });
     }
 
-    function toggleInlinePlanetPanel(key) {
+    function toggleInlinePlanetPanel(key, forceOpen) {
       const panel = document.getElementById('inlinePlanetPanel');
-      if (currentPanelKey === key && !panel.classList.contains('hidden')) { closeInlinePanel(); return; }
+      if (!forceOpen && currentPanelKey === key && !panel.classList.contains('hidden')) { closeInlinePanel(); return; }
       currentPanelKey = key;
       const b = lastCalculatedChart.bodies[key];
       const meta = ALL_PLANET_METAS[key];
@@ -939,61 +1155,43 @@ Rule 2 (General/Irrelevant Questions): Start with [ASTRO_INVALID], refund credit
 
       if (currentLang === 'en') {
         document.getElementById('reportSelf').innerHTML = `
-          <p>Your external mask and social persona is anchored in <strong>ASC ${ascSign}</strong>, which naturally radiates adventurous, optimistic, and energetic cosmic vibes to the outside world. People perceive you as an open-minded pioneer who loves freedom and broad horizons.</p>
-          <p>However, your core ego, conscious identity, and true life purpose reside deeply within <strong>Sun in ${sunSign} (${sun.house}th House)</strong>, operating in conjunction with Mercury. This imbues your character with meticulous analytical insight, data-driven logical precision, and an unyielding drive for intellectual perfectionism.</p>
-          <p>Meanwhile, your emotional sanctuary and inner subconscious realm are governed by <strong>Moon in ${moonSign} (${moon.house}th House)</strong>. This placement reveals that beneath your outgoing or professional facade, you deeply crave a secure, private emotional harbor—an independent sanctuary where you can retreat to recharge your mental battery away from external noise and public scrutiny.</p>
+          <p>Your external mask and social persona is anchored in <strong>ASC ${ascSign}</strong>, shaping how others perceive your outward style and first impression.</p>
+          <p>Your core ego and conscious identity center on <strong>Sun in ${sunSign} (${sun.house}th House)</strong>${sun.isRx ? '' : ''}, defining your fundamental character and life direction.</p>
+          <p>Your emotional inner world is governed by <strong>Moon in ${moonSign} (${moon.house}th House)</strong>, revealing what you need for a genuine sense of emotional security.</p>
         `;
-        
         document.getElementById('reportCareer').innerHTML = `
-          <p>Your ultimate career zenith and social achievement point are illuminated by <strong>MC in ${mcSign}</strong>, guiding you toward areas requiring diplomacy, structural balance, and aesthetic or intellectual judgment.</p>
-          <p>Simultaneously, your raw drive, execution power, and professional stamina are fueled by <strong>Mars in ${marsSign} (${mars.house}th House)</strong>${mars.isRx ? ' [Retrograde]' : ''}. This powerhouse placement indicates that you thrive remarkably well in autonomous, independent working environments or specialized B2B sectors.</p>
-          <p>You abhor micro-management and achieve explosive, paradigm-shifting results when given the freedom to leverage sharp data analytics, independent research, and deep strategic concentration.</p>
+          <p>Your career zenith and public reputation are illuminated by <strong>MC in ${mcSign}</strong>, indicating the general direction where your achievements are recognized.</p>
+          <p>Your drive and execution power are fueled by <strong>Mars in ${marsSign} (${mars.house}th House)</strong>${mars.isRx ? ' [Retrograde]' : ''}, showing how you push projects forward and where friction may appear.</p>
         `;
-        
         document.getElementById('reportWealth').innerHTML = `
-          <p>Your material growth, financial luck, and wealth accumulation channels are anchored by <strong>Part of Fortune in ${fortuneSign} (${h2.house}th House)</strong>, powerfully bolstered by <strong>Jupiter and Saturn in Taurus (${saturn.house}th House)</strong>${saturn.isRx ? ' [Retrograde]' : ''}.</p>
-          <p>Your financial DNA is built on long-term stability rather than reckless speculation. You excel at creating systematic, automated asset-building structures by transforming your hard-earned professional expertise and meticulous execution into compounding long-term value.</p>
-          <p>Prudent budgeting and disciplined risk management form your unbreakable financial safety net.</p>
+          <p>Your material growth channel is anchored by <strong>Part of Fortune in ${fortuneSign} (${h2.house}th House)</strong>, and long-term structure is shaped by <strong>Saturn in ${currentLang === 'en' ? saturn.sign.en : saturn.sign.kor} (${saturn.house}th House)</strong>${saturn.isRx ? ' [Retrograde]' : ''}.</p>
+          <p>This combination points to where disciplined, patient effort compounds into lasting financial stability.</p>
         `;
-        
         document.getElementById('reportLove').innerHTML = `
-          <p>Your romantic style, relational aesthetic, and values are deeply influenced by <strong>Venus in ${venusSign} (${venus.house}th House)</strong>${venus.isRx ? ' [Retrograde]' : ''}. You place immense value on intellectual resonance, deep emotional loyalty, and stimulating conversations over superficial charms.</p>
-          <p>You seek a partner who respects your fierce need for personal autonomy and intellectual freedom while providing a warm, steadfast, and reliable emotional anchor.</p>
-          <p>Trust built through transparent communication is the ultimate catalyst for your heart.</p>
+          <p>Your romantic style and relational values are shaped by <strong>Venus in ${venusSign} (${venus.house}th House)</strong>${venus.isRx ? ' [Retrograde]' : ''}, showing what you find attractive and how you express affection.</p>
         `;
-        
         document.getElementById('reportKarma').innerHTML = `
-          <p>Your soul's ultimate evolutionary trajectory is guided by <strong>North Node in ${nodeSign}</strong>, urging you to step into authentic self-expression, creative leadership, and courageous authenticity.</p>
-          <p>Concurrently, <strong>Saturn in Taurus (${saturn.house}th House)</strong> demands grounded discipline, patience, and unbreakable structural boundaries. True mastery and life fulfillment are achieved when you harmonize your grand intellectual visions with steady, unyielding daily execution—transforming past karmic habits into structured, enduring achievements that stand the test of time.</p>
+          <p>Your soul's growth direction is indicated by the <strong>(Mean) North Node in ${nodeSign}</strong>, while the South Node marks familiar patterns you're moving beyond. Saturn's placement above shows the discipline needed to integrate this growth into lasting achievement.</p>
         `;
       } else {
         document.getElementById('reportSelf').innerHTML = `
-          <p>당신의 외적 가면과 사회적 페르소나는 <strong>상승점(ASC) ${ascSign}</strong>으로 이루어져 있어, 타인에게 낙천적이고 활기차며 경계 없는 탐구 정신을 지닌 사람으로 비춰집니다. 새로운 지식과 넓은 세계를 향해 거침없이 뻗어 나가는 역동적인 에너지를 품고 있습니다.</p>
-          <p>그러나 내면의 본질적 자아와 핵심 정체성은 <strong>태양 ${sunSign} ${sun.house}하우스</strong>에 깊게 뿌리내리고 있으며, 수성과 강력하게 결합되어 있습니다. 이는 철저한 분석력, 날카로운 디테일, 그리고 데이터에 기반한 완벽주의적 성취욕으로 직결됩니다.</p>
-          <p>한편 무의식과 감정의 안식처인 <strong>달은 ${moonSign} ${moon.house}하우스</strong>에 머물러 있어, 겉으로는 치열하게 사회적 성취를 이루더라도 내면적으로는 오롯이 혼자만의 사색과 정서적 재충전을 보장받는 독립적이고 안전한 쉼터가 자존감 유지의 절대적 필수 조건임을 말해줍니다.</p>
+          <p>당신의 외적 이미지와 첫인상은 <strong>상승점(ASC) ${ascSign}</strong>에 뿌리를 두고 있어, 타인에게 비춰지는 스타일과 태도의 기본 톤을 결정합니다.</p>
+          <p>내면의 본질적 자아와 핵심 정체성은 <strong>태양 ${sunSign} ${sun.house}하우스</strong>에 자리해, 삶의 방향성과 근본적인 성격을 이끌어갑니다.</p>
+          <p>정서적 안정의 원천은 <strong>달 ${moonSign} ${moon.house}하우스</strong>에 있으며, 진짜 마음의 편안함을 느끼기 위해 무엇이 필요한지를 보여줍니다.</p>
         `;
-        
         document.getElementById('reportCareer').innerHTML = `
-          <p>사회적 성취와 커리어의 정점을 뜻하는 <strong>MC는 ${mcSign}</strong>에 위치해 있어, 대외적으로는 조화와 균형, 혹은 지적인 조정 능력을 발휘하는 무대에서 빛을 발합니다.</p>
-          <p>반면 실질적인 실행력, 투지, 그리고 업무적 추진력은 <strong>화성 ${marsSign} ${mars.house}하우스</strong>${mars.isRx ? ' [역행 ℞]' : ''}에 폭발적으로 응축되어 있습니다. 타인의 불필요한 간섭을 극도로 싫어하며, 강한 자율성과 독립성이 보장되는 환경에서 진가를 발휘합니다.</p>
-          <p>데이터와 숫자를 다루거나, 전문적인 지식을 활용하여 고도의 집중력을 발휘하는 B2B 및 독립적 연구·분석 영역에서 타인의 추종을 불허하는 독보적인 성과를 빚어냅니다.</p>
+          <p>사회적 성취와 평판의 정점을 나타내는 <strong>MC는 ${mcSign}</strong>에 위치해, 어떤 방향에서 성과가 인정받기 쉬운지를 보여줍니다.</p>
+          <p>실행력과 추진력은 <strong>화성 ${marsSign} ${mars.house}하우스</strong>${mars.isRx ? ' [역행 ℞]' : ''}에서 발현되며, 일을 밀어붙이는 방식과 마찰이 생길 수 있는 지점을 시사합니다.</p>
         `;
-        
         document.getElementById('reportWealth').innerHTML = `
-          <p>물질적 행운과 자산 증식의 터전은 <strong>포춘 ${fortuneSign} ${h2.house}하우스</strong>에 자리 잡고 있으며, <strong>황소자리의 목성과 토성(${saturn.house}하우스)</strong>${saturn.isRx ? ' [역행 ℞]' : ''}이 그 기반을 철저하고 단단하게 다져주고 있습니다.</p>
-          <p>변동성 높은 투기나 요행을 바라기보다는, 본인의 전문성과 근로·사업 소득을 체계적인 복리 시스템으로 전환하는 탁월한 재물 DNA를 지니고 있습니다.</p>
-          <p>철저한 리스크 관리와 장기적인 자산 락인(Lock-in) 전략을 통해 시간이 흐를수록 눈덩이처럼 불어나는 안정적인 부의 축적 패턴을 완성합니다.</p>
+          <p>물질적 성장의 통로는 <strong>포춘 ${fortuneSign} ${h2.house}하우스</strong>에 있고, 장기적인 구조와 인내는 <strong>토성 ${currentLang === 'en' ? saturn.sign.en : saturn.sign.kor} ${saturn.house}하우스</strong>${saturn.isRx ? ' [역행 ℞]' : ''}가 다져줍니다.</p>
+          <p>이 조합은 꾸준하고 절제된 노력이 시간이 지나며 복리처럼 쌓이는 지점을 알려줍니다.</p>
         `;
-        
         document.getElementById('reportLove').innerHTML = `
-          <p>연애와 대인관계의 미적 감각을 지배하는 <strong>금성은 ${venusSign} ${venus.house}하우스</strong>${venus.isRx ? ' [역행 ℞]' : ''}에 머물러 있습니다. 겉모습의 화려함이나 가벼운 밀당보다는, 지적인 대화가 깊이 통하고 영혼의 결이 맞는 파트너에게 진심으로 매료됩니다.</p>
-          <p>상대의 독립적인 세계와 개인 시간을 온전히 존중해 주는 동시에, 정신적인 연대감과 든든한 신뢰를 줄 수 있는 상대와 가장 이상적이고 안정적인 깊은 관계를 맺습니다.</p>
+          <p>연애 스타일과 관계의 가치관은 <strong>금성 ${venusSign} ${venus.house}하우스</strong>${venus.isRx ? ' [역행 ℞]' : ''}에 담겨 있어, 무엇에 끌리고 애정을 어떻게 표현하는지를 보여줍니다.</p>
         `;
-        
         document.getElementById('reportKarma').innerHTML = `
-          <p>영혼이 나아갈 진화의 최정점 목적지는 <strong>${nodeSign} 북노드</strong>를 향하고 있으며, <strong>황소자리 토성(${saturn.house}하우스)</strong>은 삶의 구조화와 실질적인 책임 완수를 강력하게 요구합니다.</p>
-          <p>거창한 이상과 지적 비전을 품되, 일상의 사소한 루틴과 데이터들을 성실하게 쌓아 올릴 때 비로소 진정한 마스터리가 열립니다.</p>
-          <p>과거의 카르마적 불안정성을 극복하고, 인생 후반부로 갈수록 무너지지 않는 견고한 성취와 영혼의 평온을 동시에 거머쥐게 됩니다.</p>
+          <p>영혼이 성장해야 할 방향은 <strong>${nodeSign} 북노드(평균)</strong>가 가리키며, 남노드는 이미 익숙해진 패턴을 나타냅니다. 위에서 살펴본 토성의 배치는 이 성장을 꾸준한 성취로 다지기 위해 필요한 훈련을 보여줍니다.</p>
         `;
       }
     }
@@ -1040,6 +1238,7 @@ Rule 2 (General/Irrelevant Questions): Start with [ASTRO_INVALID], refund credit
       document.getElementById('btnLangEn').addEventListener('click', () => switchLanguage('en'));
 
       setupCitySearch();
+      renderSelectedCityLabel();
       checkAndInitDailyCredits();
 
       let catClickCount = 0;
@@ -1057,6 +1256,14 @@ Rule 2 (General/Irrelevant Questions): Start with [ASTRO_INVALID], refund credit
 
       document.getElementById('astroForm').addEventListener('submit', (e) => {
         e.preventDefault();
+
+        if (typeof Astronomy === 'undefined' || typeof luxon === 'undefined') {
+          alert(currentLang === 'en'
+            ? 'Astronomy engine failed to load (check network/CDN access) — cannot calculate an accurate chart.'
+            : '천문 계산 엔진 로드에 실패했습니다 (네트워크/CDN 접근 확인 필요) — 정확한 차트를 계산할 수 없습니다.');
+          return;
+        }
+
         const rawName = document.getElementById('profileName').value.trim();
         const birthDate = document.getElementById('birthDate').value;
         const hour = parseInt(document.getElementById('birthHour').value, 10);
@@ -1079,6 +1286,25 @@ Rule 2 (General/Irrelevant Questions): Start with [ASTRO_INVALID], refund credit
           setDeveloperMode(false);
         }
 
+        const btnCalculate = document.getElementById('btnCalculate');
+        const btnCalculateText = document.getElementById('btnCalculateText');
+        const t = TRANSLATIONS[currentLang];
+        const originalLabel = btnCalculateText.textContent;
+        btnCalculate.disabled = true;
+        btnCalculateText.innerHTML = `<span class="spin-loader"></span> ${t.btnCalculating}`;
+
+        let chart;
+        try {
+          chart = calculateFullChart(birthDate, hour, minute, currentSelectedCity);
+        } catch (err) {
+          alert((currentLang === 'en' ? 'Chart calculation failed: ' : '차트 계산에 실패했습니다: ') + err.message);
+          btnCalculate.disabled = false;
+          btnCalculateText.textContent = originalLabel;
+          return;
+        }
+        btnCalculate.disabled = false;
+        btnCalculateText.textContent = originalLabel;
+
         const name = rawName || 'User';
         chatConversationHistory = [];
         const chatBox = document.getElementById('chatBox');
@@ -1086,7 +1312,6 @@ Rule 2 (General/Irrelevant Questions): Start with [ASTRO_INVALID], refund credit
           chatBox.innerHTML = `<div class="flex items-start gap-3"><div class="w-8 h-8 rounded-full bg-pink-500/20 text-pink-400 flex items-center justify-center text-sm font-bold shrink-0">🐱</div><div class="bg-slate-800/90 text-slate-200 p-4 rounded-2xl rounded-tl-none max-w-[90%] leading-relaxed shadow-md space-y-2 border border-indigo-900/40"><p>${currentLang === 'en' ? 'Whole Sign chart updated successfully 🐾' : '정통 홀사인 차트 계산이 성공적으로 완료되었습니다 🐾'}</p></div></div>`;
         }
 
-        const chart = calculateFullChart(birthDate, hour, minute, currentSelectedCity);
         lastCalculatedChart = chart;
         currentNatalContext = buildAstroContextString(name, chart, currentSelectedCity);
 
