@@ -125,11 +125,15 @@
           </div>
 
           <div>
-            <label id="labelBirthTime" class="block text-xs font-bold text-slate-300 mb-1">출생 시간 (24시간 기준 타이핑)</label>
-            <div class="flex items-center gap-1">
-              <input type="number" id="birthHour" min="0" max="23" placeholder="시(0~23)" required class="w-1/2 bg-slate-950 border border-slate-700 rounded-2xl px-2 py-2.5 text-sm text-white focus:outline-none focus:border-pink-400 text-center font-medium" />
+            <label id="labelBirthTime" class="block text-xs font-bold text-slate-300 mb-1">출생 시간 (AM/PM 선택)</label>
+            <div class="flex items-center gap-1.5">
+              <input type="number" id="birthHour" min="1" max="12" placeholder="시(1~12)" required class="w-[34%] bg-slate-950 border border-slate-700 rounded-2xl px-2 py-2.5 text-sm text-white focus:outline-none focus:border-pink-400 text-center font-medium" />
               <span class="text-slate-500 font-bold">:</span>
-              <input type="number" id="birthMinute" min="0" max="59" placeholder="분(0~59)" required class="w-1/2 bg-slate-950 border border-slate-700 rounded-2xl px-2 py-2.5 text-sm text-white focus:outline-none focus:border-pink-400 text-center font-medium" />
+              <input type="number" id="birthMinute" min="0" max="59" placeholder="분(0~59)" required class="w-[34%] bg-slate-950 border border-slate-700 rounded-2xl px-2 py-2.5 text-sm text-white focus:outline-none focus:border-pink-400 text-center font-medium" />
+              <select id="birthMeridiem" class="w-[32%] bg-slate-950 border border-slate-700 rounded-2xl px-2 py-2.5 text-xs text-white focus:outline-none focus:border-pink-400 font-bold">
+                <option value="am">AM</option>
+                <option value="pm" selected>PM</option>
+              </select>
             </div>
           </div>
         </div>
@@ -383,7 +387,7 @@
         formHeaderSub: "* 자정 기준 5캔 자동 충전",
         labelName: "이름 / 닉네임",
         labelBirthDate: "생년월일 (Date of Birth)",
-        labelBirthTime: "출생 시간 (24시간 기준 타이핑)",
+        labelBirthTime: "출생 시간 (AM/PM 선택)",
         labelCity: "출생 도시 (국내 시·군 및 전 세계 주요 도시 검색)",
         labelCurrentCity: "📍 현재 선택:",
         namePlaceholder: "예: 우주별이",
@@ -437,7 +441,7 @@
         formHeaderSub: "* 5 Cans auto-refilled daily at midnight",
         labelName: "Name / Nickname",
         labelBirthDate: "Date of Birth",
-        labelBirthTime: "Birth Time (24h format)",
+        labelBirthTime: "Birth Time (AM/PM)",
         labelCity: "Birth City (Search global major cities)",
         labelCurrentCity: "📍 Selected:",
         namePlaceholder: "e.g., CosmicStar",
@@ -483,6 +487,24 @@
         cityApprox: "(Longitude-based approx. timezone · lower precision)"
       }
     };
+
+    function convert12HourTo24Hour(hour12, minute, meridiem) {
+      const hour = Number(hour12);
+      const minuteValue = Number(minute);
+
+      if (Number.isNaN(hour) || hour < 1 || hour > 12 || Number.isNaN(minuteValue) || minuteValue < 0 || minuteValue > 59) {
+        return null;
+      }
+
+      let hour24 = hour;
+      if (meridiem === 'am') {
+        hour24 = hour === 12 ? 0 : hour;
+      } else {
+        hour24 = hour === 12 ? 12 : hour + 12;
+      }
+
+      return { hour: hour24, minute: minuteValue };
+    }
 
     function switchLanguage(lang) {
       currentLang = lang;
@@ -1280,18 +1302,23 @@ Rule 2 (General/Irrelevant Questions): Start with [ASTRO_INVALID], refund credit
 
         const rawName = document.getElementById('profileName').value.trim();
         const birthDate = document.getElementById('birthDate').value;
-        const hour = parseInt(document.getElementById('birthHour').value, 10);
+        const hour12 = parseInt(document.getElementById('birthHour').value, 10);
         const minute = parseInt(document.getElementById('birthMinute').value, 10);
+        const meridiem = document.getElementById('birthMeridiem').value;
+        const time24 = convert12HourTo24Hour(hour12, minute, meridiem);
 
         if (!birthDate) {
           alert(currentLang === 'en' ? 'Please select your date of birth.' : '생년월일을 선택해주세요.');
           return;
         }
 
-        if (isNaN(hour) || hour < 0 || hour > 23 || isNaN(minute) || minute < 0 || minute > 59) {
-          alert(currentLang === 'en' ? 'Please enter a valid birth time (0-23, 0-59).' : '출생 시간을 올바르게 입력해주세요.');
+        if (!time24) {
+          alert(currentLang === 'en' ? 'Please enter a valid birth time (1-12 AM/PM, 0-59 minutes).' : '출생 시간을 올바르게 입력해주세요. (시: 1~12, 분: 0~59, AM/PM 선택)');
           return;
         }
+
+        const hour = time24.hour;
+        const minute24 = time24.minute;
 
         if (rawName.toLowerCase() === 'cosmos') {
           setDeveloperMode(true);
@@ -1309,7 +1336,7 @@ Rule 2 (General/Irrelevant Questions): Start with [ASTRO_INVALID], refund credit
 
         let chart;
         try {
-          chart = calculateFullChart(birthDate, hour, minute, currentSelectedCity);
+          chart = calculateFullChart(birthDate, hour, minute24, currentSelectedCity);
         } catch (err) {
           alert((currentLang === 'en' ? 'Chart calculation failed: ' : '차트 계산에 실패했습니다: ') + err.message);
           btnCalculate.disabled = false;
