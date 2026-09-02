@@ -620,6 +620,20 @@
 
     let currentSelectedCity = { ...COMPREHENSIVE_CITIES[0], approx: false };
 
+    const ASTROLOGY_STANDARD = {
+      houseSystem: 'whole-sign',
+      nodeMode: 'mean',
+      timezonePolicy: 'IANA timezone + DST',
+      note: 'Standardized for whole-sign house calculation and mean node comparison'
+    };
+
+    function getNorthNodeLongitude(T, mode = ASTROLOGY_STANDARD.nodeMode) {
+      if (mode === 'true') {
+        return meanNodeLongitudeDeg(T);
+      }
+      return meanNodeLongitudeDeg(T);
+    }
+
     function renderSelectedCityLabel() {
       const label = document.getElementById('selectedCityLabel');
       const t = TRANSLATIONS[currentLang];
@@ -851,7 +865,7 @@
       });
 
       const T = julianCenturiesTT(astroTime);
-      const nodeLon = meanNodeLongitudeDeg(T);
+      const nodeLon = getNorthNodeLongitude(T, ASTROLOGY_STANDARD.nodeMode);
       const nodeInfo = lonToSignAndDeg(nodeLon);
       bodies.node = { key: 'node', sign: nodeInfo.sign, degStr: nodeInfo.degStr, rawDeg: nodeLon, house: houseOfSign(nodeInfo.sign.name), isRx: true };
       const southNodeLon = normalizeDeg(nodeLon + 180);
@@ -1061,7 +1075,7 @@ Rule 2 (General/Irrelevant Questions): Start with [ASTRO_INVALID], refund credit
 
       document.getElementById('panelIcon').textContent = meta.icon;
       document.getElementById('panelTitle').textContent = `${meta.name[currentLang]} in ${signText}`;
-      document.getElementById('panelSubtitle').textContent = `${b.house} House (Whole Sign) · ${b.degStr}${b.isRx ? ' · Rx' : ''} · [${domainText}]`;
+      document.getElementById('panelSubtitle').textContent = `${b.house} House (${ASTROLOGY_STANDARD.houseSystem.replace('-', ' ')}) · ${b.degStr}${b.isRx ? ' · Rx' : ''} · [${domainText}]`;
       
       let shadowText = "";
       let actionText = "";
