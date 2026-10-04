@@ -901,19 +901,13 @@
     }
 
     function buildAstroContextString(name, chart, city) {
-      const unk = !!chart.timeUnknown;
       const lines = [`[Whole Sign Client Chart Data: ${name} / ${city.enName || city.name}]`];
       Object.values(chart.bodies).forEach(b => {
-        if (unk && b.key === 'fortune') return;
         const meta = ALL_PLANET_METAS[b.key] || { name: { en: b.key } };
-        lines.push(`${meta.name.en} in ${b.sign.en} ${b.degStr}${unk ? '' : ' in ' + b.house + 'H'}${b.isRx ? ' [Rx]' : ''}`);
+        lines.push(`${meta.name.en} in ${b.sign.en} ${b.degStr} in ${b.house}H${b.isRx ? ' [Rx]' : ''}`);
       });
-      if (unk) {
-        lines.push('Birth time unknown (noon used): ASC, MC, houses and Part of Fortune unavailable; Moon position approximate');
-      } else {
-        lines.push(`ASC: ${chart.angles.asc.sign.en} ${chart.angles.asc.degStr}`);
-        lines.push(`MC: ${chart.angles.mc.sign.en} ${chart.angles.mc.degStr}`);
-      }
+      lines.push(`ASC: ${chart.angles.asc.sign.en} ${chart.angles.asc.degStr}`);
+      lines.push(`MC: ${chart.angles.mc.sign.en} ${chart.angles.mc.degStr}`);
       return lines.join('\n');
     }
 
@@ -979,6 +973,13 @@
 
     async function requestChat(history) {
       const devToken = localStorage.getItem('meow_dev_token');
+      const hist = trimHistory(history).map(m => ({ ...m }));
+      if (lastCalculatedChart && lastCalculatedChart.timeUnknown) {
+        const tag = currentLang === 'en' ? '[Birth time unknown: ignore houses/ASC/MC/Fortune] ' : '[출생시간 모름: 하우스·ASC·MC·포춘 무시] ';
+        for (let i = hist.length - 1; i >= 0; i--) {
+          if (hist[i].role === 'user') { hist[i].text = tag + hist[i].text; break; }
+        }
+      }
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: Object.assign({ 'Content-Type': 'application/json' }, devToken ? { 'x-admin-token': devToken } : {}),
@@ -987,7 +988,7 @@
           cityLabel: currentSelectedCity.enName || currentSelectedCity.name,
           lang: currentLang,
           chartLines: currentNatalContext.split('\n').slice(1),
-          history: trimHistory(history)
+          history: hist
         })
       });
       const data = await res.json().catch(() => ({}));
