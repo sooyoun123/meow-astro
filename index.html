@@ -7,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-  <!-- 로컬 내장형 천문 계산 엔진으로 전환: 네트워크/CDN 의존 제거 -->
+  <!-- 로컬 내장형 천문 계산 엔진: 네트워크/CDN 의존 제거 -->
   <script src="./vendor/astronomy.browser.min.js"></script>
   <script src="./vendor/luxon.min.js"></script>
   <style>
@@ -28,10 +28,7 @@
       0% { transform: translateY(0px) rotate(0deg); }
       100% { transform: translateY(-6px) rotate(2deg); }
     }
-    #soulCatImg {
-      background-color: transparent !important;
-      object-fit: cover;
-    }
+    #soulCatImg { background-color: transparent !important; object-fit: cover; }
     .typing-cursor::after {
       content: '▋';
       display: inline;
@@ -39,16 +36,9 @@
       color: #ec4899;
       margin-left: 2px;
     }
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-    .bot-content p, .bot-content div {
-      margin-bottom: 0.75rem;
-    }
-    .bot-content p:last-child {
-      margin-bottom: 0;
-    }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    .bot-content p, .bot-content div { margin-bottom: 0.75rem; }
+    .bot-content p:last-child { margin-bottom: 0; }
     .spin-loader {
       display: inline-block;
       width: 1em;
@@ -62,7 +52,7 @@
   </style>
 </head>
 <body class="min-h-screen py-6 px-3 md:px-6 relative overflow-x-hidden">
-  
+
   <div class="fixed inset-0 pointer-events-none opacity-30 z-0">
     <div class="absolute top-10 left-10 text-yellow-300 text-xs animate-ping">✦</div>
     <div class="absolute top-1/4 right-16 text-pink-300 text-sm animate-pulse">★</div>
@@ -131,8 +121,8 @@
               <span class="text-slate-500 font-bold">:</span>
               <input type="number" id="birthMinute" min="0" max="59" placeholder="분(0~59)" required class="w-[34%] bg-slate-950 border border-slate-700 rounded-2xl px-2 py-2.5 text-sm text-white focus:outline-none focus:border-pink-400 text-center font-medium" />
               <select id="birthMeridiem" class="w-[32%] bg-slate-950 border border-slate-700 rounded-2xl px-2 py-2.5 text-xs text-white focus:outline-none focus:border-pink-400 font-bold">
-                <option value="am">AM</option>
-                <option value="pm" selected>PM</option>
+                <option value="am" selected>AM</option>
+                <option value="pm">PM</option>
               </select>
             </div>
           </div>
@@ -329,7 +319,7 @@
         </div>
 
         <form id="chatForm" class="flex gap-2">
-          <input type="text" id="userInput" placeholder="지금 네 마음을 괴롭히는 우주 먼지가 있니? 무엇이든 물어보라냥 🐾" class="flex-1 bg-slate-950 border border-slate-700 rounded-2xl px-4 py-3 text-xs md:text-sm text-white focus:outline-none focus:border-pink-400 placeholder:text-slate-600 font-medium" />
+          <input type="text" id="userInput" maxlength="300" placeholder="지금 네 마음을 괴롭히는 우주 먼지가 있니? 무엇이든 물어보라냥 🐾" class="flex-1 bg-slate-950 border border-slate-700 rounded-2xl px-4 py-3 text-xs md:text-sm text-white focus:outline-none focus:border-pink-400 placeholder:text-slate-600 font-medium" />
           <button type="submit" id="btnSend" class="bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-600 hover:opacity-90 text-white px-5 py-3 rounded-2xl font-extrabold text-xs md:text-sm transition shrink-0 flex items-center gap-1.5 shadow-lg active:scale-95">
             <span id="btnSendText">질문</span> <i class="fa-solid fa-paper-plane"></i>
           </button>
@@ -357,22 +347,6 @@
     </div>
   </div>
 
-  <div id="geminiModal" class="hidden fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-    <div class="bg-slate-900 border border-indigo-500/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl">
-      <div class="flex items-center justify-between">
-        <h3 id="geminiModalTitle" class="text-base font-bold text-white flex items-center gap-2">
-          <i class="fa-solid fa-key text-pink-400"></i> [개발자 모드] Gemini API Key 설정
-        </h3>
-        <button id="btnCloseGeminiModal" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-      </div>
-      <p id="geminiModalDesc" class="text-xs text-slate-300 leading-relaxed">Google AI Studio에서 발급받은 무료 API 키를 입력하세요.</p>
-      <input type="password" id="inputGeminiKey" placeholder="AIzaSy..." class="w-full bg-slate-950 border border-slate-700 rounded-2xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-pink-400 font-mono" />
-      <div class="flex justify-end gap-2 pt-2">
-        <button id="btnRemoveGeminiKey" class="px-3 py-2 bg-slate-800 text-rose-400 hover:bg-slate-700 rounded-xl text-xs font-bold">키 삭제</button>
-        <button id="btnSaveGeminiKey" class="px-4 py-2 bg-gradient-to-r from-pink-500 to-indigo-600 hover:opacity-90 text-white rounded-xl text-xs font-black">저장하기</button>
-      </div>
-    </div>
-  </div>
 
   <script>
     let currentLang = 'ko';
@@ -419,6 +393,7 @@
         chatWelcomeMsg: "홀사인 소울 냥이 분석과 5대 심층 리포트가 완성되었습니다. 지금 네 마음을 괴롭히는 우주 먼지가 있니? 무엇이든 물어보라냥 🐾 질문 시 참치캔 1캔이 소진되며 무관한 일상 질문은 자동 환불됩니다 🐟",
         userInputPlaceholder: "지금 네 마음을 괴롭히는 우주 먼지가 있니? 무엇이든 물어보라냥 🐾",
         btnSendText: "질문",
+        truncatedNotice: "⚠️ 답변이 너무 길어서 일부가 잘렸어요. 질문을 조금 더 구체적으로 다시 해주세요 🐾",
         quickChips: [
           "💼 10하우스와 행성 배치로 보는 최적의 커리어/이직 타이밍",
           "❤️ 금성(Venus)과 7하우스로 보는 이상적 파트너 및 연애 함정",
@@ -473,6 +448,7 @@
         chatWelcomeMsg: "Your Whole Sign cosmic soul cat analysis and 5 deep reports are complete. Is there any cosmic dust troubling your mind today? Ask me anything 🐾 1 tuna can is consumed per question; unrelated general questions are automatically refunded 🐟",
         userInputPlaceholder: "Is there any cosmic dust troubling your mind? Ask me anything 🐾",
         btnSendText: "Ask",
+        truncatedNotice: "⚠️ The answer was too long and got cut off. Please try a more specific question 🐾",
         quickChips: [
           "💼 Optimal career & job change timing via 10th House",
           "❤️ Ideal partner & romance traps via Venus & 7th House",
@@ -488,22 +464,33 @@
       }
     };
 
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
     function convert12HourTo24Hour(hour12, minute, meridiem) {
       const hour = Number(hour12);
       const minuteValue = Number(minute);
+      const period = String(meridiem || 'am').toLowerCase();
 
       if (Number.isNaN(hour) || hour < 1 || hour > 12 || Number.isNaN(minuteValue) || minuteValue < 0 || minuteValue > 59) {
         return null;
       }
+      if (period !== 'am' && period !== 'pm') {
+        return null;
+      }
 
       let hour24 = hour;
-      if (meridiem === 'am') {
+      if (period === 'am') {
         hour24 = hour === 12 ? 0 : hour;
       } else {
         hour24 = hour === 12 ? 12 : hour + 12;
       }
-
-      return { hour: hour24, minute: minuteValue };
+      return { hour: hour24, minute: minuteValue, meridiem: period };
     }
 
     function switchLanguage(lang) {
@@ -531,7 +518,7 @@
       document.getElementById('labelBirthTime').textContent = t.labelBirthTime;
       document.getElementById('labelCity').textContent = t.labelCity;
       document.getElementById('labelCurrentCity').textContent = t.labelCurrentCity;
-      
+
       document.getElementById('profileName').placeholder = t.namePlaceholder;
       document.getElementById('citySearchInput').placeholder = t.cityPlaceholder;
 
@@ -543,20 +530,12 @@
       document.getElementById('reportSectionTitle').innerHTML = `<span>📜</span> ${t.reportSectionTitle}`;
       document.getElementById('reportSectionSub').textContent = t.reportSectionSub;
       document.getElementById('badgeReport').textContent = t.badgeReport;
-      
-      if (lang === 'en') {
-        document.getElementById('theme1Title').innerHTML = `<span>👤</span> 1. Innate Essence & Social Mask (Ego/Mental)`;
-        document.getElementById('theme2Title').innerHTML = `<span>💼</span> 2. Career & Job Success (Career Fortune)`;
-        document.getElementById('theme3Title').innerHTML = `<span>💰</span> 3. Wealth & Asset Growth Pattern (Wealth Fortune)`;
-        document.getElementById('theme4Title').innerHTML = `<span>❤️</span> 4. Love Style & Ideal Partner (Romance Fortune)`;
-        document.getElementById('theme5Title').innerHTML = `<span>🌌</span> 5. Life Karma & Soul Escape Route (Remedy)`;
-      } else {
-        document.getElementById('theme1Title').innerHTML = `<span>👤</span> 1. 타고난 본질 & 사회적 가면 (자아/멘탈)`;
-        document.getElementById('theme2Title').innerHTML = `<span>💼</span> 2. 커리어 & 이직/사회적 성공 (직업운)`;
-        document.getElementById('theme3Title').innerHTML = `<span>💰</span> 3. 재물복 & 자산 증식 패턴 (재물운)`;
-        document.getElementById('theme4Title').innerHTML = `<span>❤️</span> 4. 연애 스타일 & 이상적 파트너 (애정운)`;
-        document.getElementById('theme5Title').innerHTML = `<span>🌌</span> 5. 인생의 카르마 & 영혼의 탈출구 (개운법)`;
-      }
+
+      document.getElementById('theme1Title').innerHTML = `<span>👤</span> ${t.theme1Title}`;
+      document.getElementById('theme2Title').innerHTML = `<span>💼</span> ${t.theme2Title}`;
+      document.getElementById('theme3Title').innerHTML = `<span>💰</span> ${t.theme3Title}`;
+      document.getElementById('theme4Title').innerHTML = `<span>❤️</span> ${t.theme4Title}`;
+      document.getElementById('theme5Title').innerHTML = `<span>🌌</span> ${t.theme5Title}`;
 
       document.getElementById('planetDashTitle').innerHTML = `<span>🪐</span> ${t.planetDashTitle}`;
       document.getElementById('planetDashSub').textContent = t.planetDashSub;
@@ -565,14 +544,13 @@
       document.getElementById('panelCol2Title').textContent = t.panelCol2Title;
       document.getElementById('panelCol3Title').textContent = t.panelCol3Title;
       document.getElementById('panelQuesTitle').textContent = t.panelQuesTitle;
-      document.getElementById('chatBotName').textContent = lang === 'ko' ? '우주 냥이 점성술사' : 'Cosmic Cat Astrologer';
+      document.getElementById('chatBotName').textContent = t.chatBotName;
       document.getElementById('chatBotSub').innerHTML = t.chatBotSub;
       document.getElementById('btnResetText').textContent = t.btnResetText;
       document.getElementById('userInput').placeholder = t.userInputPlaceholder;
       document.getElementById('btnSendText').textContent = t.btnSendText;
       document.getElementById('adModalTitle').textContent = t.adModalTitle;
       document.getElementById('adModalDesc').textContent = t.adModalDesc;
-      document.getElementById('geminiModalTitle').innerHTML = `<i class="fa-solid fa-key text-pink-400"></i> ${t.geminiModalTitle}`;
 
       const chips = document.querySelectorAll('.quick-chip');
       chips.forEach((chip, idx) => {
@@ -581,7 +559,7 @@
 
       const welcomeMsgEl = document.getElementById('chatWelcomeMsg');
       if (welcomeMsgEl && chatConversationHistory.length === 0) {
-        welcomeMsgEl.innerHTML = `<p>${lang === 'ko' ? '홀사인 소울 냥이 분석과 5대 심층 리포트가 완성되었습니다.' : 'Your Whole Sign cosmic soul cat analysis and 5 deep reports are complete.'}</p><p class="text-slate-400 text-xs">${t.chatWelcomeMsg}</p>`;
+        welcomeMsgEl.innerHTML = `<p>${t.chatWelcomeMsg}</p>`;
       }
 
       if (currentSelectedCity) {
@@ -594,7 +572,7 @@
           toggleInlinePlanetPanel(currentPanelKey, true);
         }
       }
-      
+
       updateCreditDisplay();
     }
 
@@ -643,16 +621,14 @@
     let currentSelectedCity = { ...COMPREHENSIVE_CITIES[0], approx: false };
 
     const ASTROLOGY_STANDARD = {
+      source: 'AstroSeek-compatible comparison',
       houseSystem: 'whole-sign',
       nodeMode: 'mean',
       timezonePolicy: 'IANA timezone + DST',
-      note: 'Standardized for whole-sign house calculation and mean node comparison'
+      note: 'AstroSeek-compatible preset: whole-sign houses with mean node, using local timezone + DST conversion'
     };
 
     function getNorthNodeLongitude(T, mode = ASTROLOGY_STANDARD.nodeMode) {
-      if (mode === 'true') {
-        return meanNodeLongitudeDeg(T);
-      }
       return meanNodeLongitudeDeg(T);
     }
 
@@ -664,25 +640,27 @@
       label.textContent = `${displayName} · ${tzText}${currentSelectedCity.approx ? ' ' + t.cityApprox : ''}`;
     }
 
+    // Open-Meteo 지오코딩: 좌표 + IANA 시간대(예: Europe/Amsterdam)를 함께 돌려줌 → 서머타임까지 정확히 반영
     async function geocodeCity(query) {
-      const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}`;
-      const res = await fetch(url, { headers: { 'Accept-Language': currentLang } });
+      const lang = currentLang === 'en' ? 'en' : 'ko';
+      const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=5&language=${lang}&format=json`;
+      const res = await fetch(url);
       if (!res.ok) throw new Error('Geocoding request failed');
       const data = await res.json();
-      if (!data || data.length === 0) return null;
-      const place = data[0];
-      const lat = parseFloat(place.lat);
-      const lon = parseFloat(place.lon);
-      const utcOffset = Math.round(lon / 15);
-      return {
-        id: 'geo_' + Date.now(),
-        name: place.display_name,
-        enName: place.display_name,
-        lat, lon,
-        tz: null,
-        utcOffset,
-        approx: true
-      };
+      if (!data || !data.results || data.results.length === 0) return [];
+      return data.results.map(r => {
+        const label = [r.name, r.admin1, r.country].filter(Boolean).join(', ');
+        return {
+          id: 'geo_' + r.id,
+          name: label,
+          enName: label,
+          lat: r.latitude,
+          lon: r.longitude,
+          tz: r.timezone || null,
+          utcOffset: Math.round(r.longitude / 15),
+          approx: !r.timezone
+        };
+      });
     }
 
     function setupCitySearch() {
@@ -702,7 +680,7 @@
           item.className = 'px-4 py-2.5 text-xs text-slate-200 hover:bg-indigo-900/60 cursor-pointer font-medium';
           item.textContent = currentLang === 'en' ? (c.enName || c.name) : c.name;
           item.addEventListener('click', () => {
-            currentSelectedCity = { ...c, approx: false };
+            currentSelectedCity = { ...c, approx: c.approx === true };
             renderSelectedCityLabel();
             suggestBox.classList.add('hidden');
             input.value = '';
@@ -730,9 +708,9 @@
 
         debounceTimer = setTimeout(async () => {
           try {
-            const geo = await geocodeCity(e.target.value.trim());
-            if (geo) {
-              renderSuggestions([geo]);
+            const geoList = await geocodeCity(e.target.value.trim());
+            if (geoList && geoList.length > 0) {
+              renderSuggestions(geoList);
             } else {
               suggestBox.classList.add('hidden');
             }
@@ -750,7 +728,8 @@
     }
 
     function julianCenturiesTT(astroTime) {
-      return (astroTime.tt - 2451545.0) / 36525.0;
+      // Astronomy Engine의 tt는 'J2000 기준 경과 일수'라서 2451545.0을 또 빼면 안 됨
+      return astroTime.tt / 36525.0;
     }
 
     function meanObliquityDeg(T) {
@@ -797,8 +776,8 @@
       mc = normalizeDeg(mc);
 
       const ascRad = Math.atan2(
-        -Math.cos(ramc),
-        Math.sin(eps) * Math.tan(lat) + Math.cos(eps) * Math.sin(ramc)
+        Math.cos(ramc),
+        -(Math.sin(ramc) * Math.cos(eps) + Math.tan(lat) * Math.sin(eps))
       );
       let asc = normalizeDeg(ascRad * 180 / Math.PI);
 
@@ -932,8 +911,7 @@
     const ADMIN_CHEAT_KEY = 'meow_astro_is_admin_v11';
 
     function isDeveloperMode() {
-      const nameInput = document.getElementById('profileName');
-      return (nameInput && nameInput.value.trim().toLowerCase() === 'cosmos') || localStorage.getItem(ADMIN_CHEAT_KEY) === 'true';
+      return !!localStorage.getItem('meow_dev_token');
     }
 
     function setDeveloperMode(status) {
@@ -975,43 +953,31 @@
       return updated;
     }
 
-    const GEMINI_KEY_STORAGE = 'gemini_astro_api_key_v11';
     let chatConversationHistory = [];
     let currentNatalContext = "";
+    let currentProfileName = 'User';
     let lastCalculatedChart = null;
 
-    function getGeminiKey() { return localStorage.getItem(GEMINI_KEY_STORAGE) || ''; }
-
-    function buildSystemInstruction(natalContext) {
-      const langRule = currentLang === 'en' 
-        ? "CRITICAL: You MUST answer ENTIRELY IN ENGLISH. No Korean allowed." 
-        : "한국어로 답변하십시오.";
-      return `You are an elite Whole Sign Cosmic Cat Astrology Master.
-${langRule}
-[Client Whole Sign Natal Chart Facts]
-${natalContext}
-[Rules]
-Rule 1 (Astro/Life/Career/Love Questions): Start with [ASTRO_VALID], no greetings, direct 3-part structure (1. Orbital Analysis / 2. Cosmic Judgment / 3. Practical Solution).
-Rule 2 (General/Irrelevant Questions): Start with [ASTRO_INVALID], refund credit notice.`;
-    }
-
-    async function requestGeminiChat(apiKey, systemPrompt, conversationHistory) {
-      const candidateModels = ['gemini-2.5-flash', 'gemini-2.5-flash-lite'];
-      let lastErr = null;
-      for (const model of candidateModels) {
-        try {
-          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-          const contents = conversationHistory.map(item => ({ role: item.role === 'user' ? 'user' : 'model', parts: [{ text: item.text }] }));
-          const payload = { contents, systemInstruction: { parts: [{ text: systemPrompt }] }, generationConfig: { temperature: 0.75, maxOutputTokens: 1000 } };
-          const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-          const data = await response.json();
-          if (!response.ok) throw new Error(data.error?.message || `HTTP ${response.status}`);
-          const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-          if (!replyText) throw new Error('No response');
-          return replyText;
-        } catch (e) { lastErr = e; }
+    async function requestChat(history) {
+      const devToken = localStorage.getItem('meow_dev_token');
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: Object.assign({ 'Content-Type': 'application/json' }, devToken ? { 'x-admin-token': devToken } : {}),
+        body: JSON.stringify({
+          name: currentProfileName,
+          cityLabel: currentSelectedCity.enName || currentSelectedCity.name,
+          lang: currentLang,
+          chartLines: currentNatalContext.split('\n').slice(1),
+          history: history.slice(-6)
+        })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        const err = new Error(data.error || ('HTTP ' + res.status));
+        err.code = data.error;
+        throw err;
       }
-      throw lastErr || new Error('Gemini API connection failed');
+      return data; // { text, valid, truncated }
     }
 
     let currentPanelKey = null;
@@ -1042,9 +1008,9 @@ Rule 2 (General/Irrelevant Questions): Start with [ASTRO_INVALID], refund credit
       uranus: { name: { ko: '천왕성', en: 'Uranus' }, icon: '♅', domain: '혁신/독창성', domainEn: 'Innovation/Uniqueness' },
       neptune: { name: { ko: '해왕성', en: 'Neptune' }, icon: '♆', domain: '영감/직관', domainEn: 'Inspiration/Intuition' },
       pluto: { name: { ko: '명왕성', en: 'Pluto' }, icon: '♇', domain: '변형/재생', domainEn: 'Transformation/Regeneration' },
-      node: { name: { ko: '북노드(평균)', en: 'North Node (Mean)' }, icon: '☊', domain: '영혼의 진화', domainEn: 'Soul Evolution' },
-      south_node: { name: { ko: '남노드(평균)', en: 'South Node (Mean)' }, icon: '☋', domain: '과거 카르마', domainEn: 'Past Karma' },
-      lilith: { name: { ko: '릴리스(평균)', en: 'Lilith (Mean)' }, icon: '⚸', domain: '그림자 본능', domainEn: 'Shadow Instinct' },
+      node: { name: { ko: '북노드', en: 'North Node' }, icon: '☊', domain: '영혼의 진화', domainEn: 'Soul Evolution' },
+      south_node: { name: { ko: '남노드', en: 'South Node' }, icon: '☋', domain: '과거 카르마', domainEn: 'Past Karma' },
+      lilith: { name: { ko: '릴리스', en: 'Lilith' }, icon: '⚸', domain: '그림자 본능', domainEn: 'Shadow Instinct' },
       fortune: { name: { ko: '포춘', en: 'Part of Fortune' }, icon: '⊗', domain: '물질적 행운', domainEn: 'Material Fortune' }
     };
 
@@ -1098,34 +1064,11 @@ Rule 2 (General/Irrelevant Questions): Start with [ASTRO_INVALID], refund credit
       document.getElementById('panelIcon').textContent = meta.icon;
       document.getElementById('panelTitle').textContent = `${meta.name[currentLang]} in ${signText}`;
       document.getElementById('panelSubtitle').textContent = `${b.house} House (${ASTROLOGY_STANDARD.houseSystem.replace('-', ' ')}) · ${b.degStr}${b.isRx ? ' · Rx' : ''} · [${domainText}]`;
-      
-      let shadowText = "";
-      let actionText = "";
-      let strengthText = "";
 
-      if (currentLang === 'en') {
-        strengthText = `Your ${meta.name.en} in ${signText} channels deep ${domainText} energy, establishing unique personal talents.`;
-        if (b.isRx) {
-          shadowText = `Retrograde(Rx) causes energy to turn inward, leading to over-introspection or delayed outward execution in this area.`;
-          actionText = `Channel this introspective energy intentionally within the ${b.house}th House domain rather than keeping it locked away.`;
-        } else {
-          shadowText = `Direct motion pushes energy outward strongly, risking burnout or impatience if unchecked by structure.`;
-          actionText = `Actively direct this powerful momentum onto the stage of the ${b.house}th House for maximum impact.`;
-        }
-      } else {
-        strengthText = `${meta.name.en}의 에너지가 ${signText} 별자리를 통해 발현되어 당신만의 독보적인 ${domainText} 역량을 형성합니다.`;
-        if (b.isRx) {
-          shadowText = `역행(℞) 상태로 인해 에너지가 내면으로 깊게 침잠하여, 지나친 반추나 외부 표출의 지연을 유발할 수 있습니다.`;
-          actionText = `내면의 에너지를 억누르지 말고, ${b.house}하우스의 무대에서 치밀한 전략과 연구의 무기로 승화시키십시오.`;
-        } else {
-          shadowText = `에너지가 외부로 거침없이 분출되므로, 주변의 페이스에 휘둘리거나 성급한 결정을 내릴 위험이 있습니다.`;
-          actionText = `${b.house}하우스가 상징하는 구체적인 삶의 무대에서 주도권을 잡고 일관된 실행력으로 밀어붙이세요.`;
-        }
-      }
-
-      document.getElementById('panelStrengths').textContent = strengthText;
-      document.getElementById('panelShadow').textContent = shadowText;
-      document.getElementById('panelAction').textContent = actionText;
+      const ins = planetInsight(key, b);
+      document.getElementById('panelStrengths').textContent = ins.strength;
+      document.getElementById('panelShadow').textContent = ins.shadow;
+      document.getElementById('panelAction').textContent = ins.action;
 
       const qText1 = currentLang === 'en' ? `How does my ${meta.name.en} in ${signText} affect my career?` : `내 ${meta.name.ko} 별자리가 직업적 성취에 미치는 영향은?`;
       const qText2 = currentLang === 'en' ? `What are the shadow aspects and remedies for my ${meta.name.en}?` : `내 ${meta.name.ko} 배치의 주의할 딜레마와 개운법은?`;
@@ -1149,7 +1092,7 @@ Rule 2 (General/Irrelevant Questions): Start with [ASTRO_INVALID], refund credit
 
     function sendPanelQuickQuestion(questionText) {
       document.getElementById('userInput').value = questionText;
-      document.getElementById('chatForm').dispatchEvent(new Event('submit'));
+      document.getElementById('chatForm').dispatchEvent(new Event('submit', { cancelable: true }));
     }
 
     function renderSoulCatCard(chart) {
@@ -1166,87 +1109,165 @@ Rule 2 (General/Irrelevant Questions): Start with [ASTRO_INVALID], refund credit
       document.getElementById('soulCatMatch').textContent = `${currentLang === 'en' ? '💞 Best Match' : '💞 찰떡궁합'}: ${soulProfile.match}`;
     }
 
-    function generateDeepFiveReports(chart) {
-      const sun = chart.bodies.sun;
-      const moon = chart.bodies.moon;
-      const asc = chart.angles.asc;
-      const mc = chart.angles.mc;
-      const mars = chart.bodies.mars;
-      const venus = chart.bodies.venus;
-      const h2 = chart.bodies.fortune;
-      const nNode = chart.bodies.node;
-      const saturn = chart.bodies.saturn;
+    // ====== 리치 해석 엔진 (차트 계산값 -> 친근한 냥이 말투 해석) ======
+    const SG=[
+['mars','망설임 없이 먼저 달려나가는','성급함과 마무리 부족','quick to leap in first','rushing and weak follow-through'],
+['venus','천천히, 하지만 꾸준히 안정을 쌓는','고집과 변화 거부','slow and steady, building comfort','stubbornness and dodging change'],
+['mercury','호기심 가득하게 이것저것 엮어보는','산만함과 깊이 부족','curious and always connecting dots','getting scattered'],
+['moon','다정하게 마음을 보살피는','예민함과 감정 기복','tender and caring','moodiness and over-worrying'],
+['sun','당당하고 따뜻하게 빛나는','알아봐 주지 않으면 상처받는 마음','warm, confident and sparkling','getting hurt when not noticed'],
+['mercury','꼼꼼하게 다듬어서 효율을 높이는','걱정과 자기비판','detail-loving and efficient','worrying and self-criticism'],
+['venus','균형을 맞추며 사람부터 챙기는','우유부단과 갈등 피하기','balance-minded and people-first','indecision and avoiding conflict'],
+['mars','깊고 집요하게 본질을 파고드는','집착과 의심','deep and intense, digging to the truth','jealousy and over-control'],
+['jupiter','낙천적으로 더 넓은 세상을 향해 달리는','과장과 지키기 힘든 약속','optimistic, chasing bigger horizons','overpromising'],
+['saturn','책임감 있게 계획 세워 한 계단씩 오르는','스스로에게 너무 빡빡한 기준과 일 중독','responsible, climbing step by step','being too hard on yourself and overworking'],
+['saturn','자유롭고 독특하게 틀을 깨는','거리두기와 차가워 보이는 인상','free, unique and rule-bending','seeming distant'],
+['jupiter','직감과 상상력으로 경계를 넘나드는','현실 도피와 흐려진 경계','dreamy and intuitive','escaping reality']
+    ];
+    const HS=[['나의 이미지·몸·새로운 시작','my image, body and fresh starts'],['돈·소유·나의 가치','money, belongings and self-worth'],['말하기·배움·가까운 사람들','talking, learning and people nearby'],['집·뿌리·마음의 쉼터','home, roots and my cozy corner'],['연애·창작·노는 즐거움','romance, creativity and play'],['일상 루틴·일·건강','daily routine, work and health'],['파트너·계약·가까운 상대','partners, contracts and close others'],['깊은 유대·공동 자산·변화','deep bonds, shared money and change'],['해외·공부·신념','faraway places, study and beliefs'],['커리어·사회적 위치','career and public standing'],['친구·커뮤니티·미래 목표','friends, community and future goals'],['무의식·혼자만의 시간·숨은 일','the unconscious, alone time and hidden work']];
+    const DIG={sun:[[4],0],moon:[[3],1],mercury:[[2,5],5],venus:[[1,6],11],mars:[[0,7],9],jupiter:[[8,11],3],saturn:[[9,10],6]};
+    const DIGT={dom:['집에 온 것처럼 편안해서 힘을 제대로 쓴다냥.','It feels right at home here and works comfortably.'],ex:['컨디션 최고조! 가장 빛나는 자리에 앉았다냥.','Peak form! It is sitting in its sweet spot.'],det:['살짝 불편한 자리라서 의식적으로 챙겨주면 좋다냥.','A slightly awkward seat, so give it a little extra care.'],fall:['처음엔 자신감이 흔들리지만 익숙해지면 깊이가 되는 자리다냥.','Confidence wobbles at first but turns into depth with time.']};
+    const ASPD=[[0,8,'찰싹 붙어서 한 팀으로 움직여요','stick together and move as a team'],[180,7,'서로 마주 보고 있어서 균형을 잡는 게 중요해요','face each other, so balance matters'],[120,7,'손발이 척척 맞는 사이예요','work together effortlessly'],[90,7,'티격태격하면서 서로를 키워줘요','bicker a bit but help each other grow'],[60,5,'살짝만 움직여도 기회가 열려요','open a door with just a small push']];
+    const ASPK=['sun','moon','mercury','venus','mars','jupiter','saturn','uranus','neptune','pluto','node'];
+    const ELS=[['불','Fire'],['흙','Earth'],['공기','Air'],['물','Water']];
 
-      renderSoulCatCard(chart);
-      renderAllPlanetsDashboard(chart);
-
-      const sunSign = currentLang === 'en' ? sun.sign.en : sun.sign.kor;
-      const moonSign = currentLang === 'en' ? moon.sign.en : moon.sign.kor;
-      const ascSign = currentLang === 'en' ? asc.sign.en : asc.sign.kor;
-      const mcSign = currentLang === 'en' ? mc.sign.en : mc.sign.kor;
-      const marsSign = currentLang === 'en' ? mars.sign.en : mars.sign.kor;
-      const venusSign = currentLang === 'en' ? venus.sign.en : venus.sign.kor;
-      const fortuneSign = currentLang === 'en' ? h2.sign.en : h2.sign.kor;
-      const nodeSign = currentLang === 'en' ? nNode.sign.en : nNode.sign.kor;
-
-      if (currentLang === 'en') {
-        document.getElementById('reportSelf').innerHTML = `
-          <p>Your external mask and social persona is anchored in <strong>ASC ${ascSign}</strong>, shaping how others perceive your outward style and first impression.</p>
-          <p>Your core ego and conscious identity center on <strong>Sun in ${sunSign} (${sun.house}th House)</strong>${sun.isRx ? '' : ''}, defining your fundamental character and life direction.</p>
-          <p>Your emotional inner world is governed by <strong>Moon in ${moonSign} (${moon.house}th House)</strong>, revealing what you need for a genuine sense of emotional security.</p>
-        `;
-        document.getElementById('reportCareer').innerHTML = `
-          <p>Your career zenith and public reputation are illuminated by <strong>MC in ${mcSign}</strong>, indicating the general direction where your achievements are recognized.</p>
-          <p>Your drive and execution power are fueled by <strong>Mars in ${marsSign} (${mars.house}th House)</strong>${mars.isRx ? ' [Retrograde]' : ''}, showing how you push projects forward and where friction may appear.</p>
-        `;
-        document.getElementById('reportWealth').innerHTML = `
-          <p>Your material growth channel is anchored by <strong>Part of Fortune in ${fortuneSign} (${h2.house}th House)</strong>, and long-term structure is shaped by <strong>Saturn in ${currentLang === 'en' ? saturn.sign.en : saturn.sign.kor} (${saturn.house}th House)</strong>${saturn.isRx ? ' [Retrograde]' : ''}.</p>
-          <p>This combination points to where disciplined, patient effort compounds into lasting financial stability.</p>
-        `;
-        document.getElementById('reportLove').innerHTML = `
-          <p>Your romantic style and relational values are shaped by <strong>Venus in ${venusSign} (${venus.house}th House)</strong>${venus.isRx ? ' [Retrograde]' : ''}, showing what you find attractive and how you express affection.</p>
-        `;
-        document.getElementById('reportKarma').innerHTML = `
-          <p>Your soul's growth direction is indicated by the <strong>(Mean) North Node in ${nodeSign}</strong>, while the South Node marks familiar patterns you're moving beyond. Saturn's placement above shows the discipline needed to integrate this growth into lasting achievement.</p>
-        `;
-      } else {
-        document.getElementById('reportSelf').innerHTML = `
-          <p>당신의 외적 이미지와 첫인상은 <strong>상승점(ASC) ${ascSign}</strong>에 뿌리를 두고 있어, 타인에게 비춰지는 스타일과 태도의 기본 톤을 결정합니다.</p>
-          <p>내면의 본질적 자아와 핵심 정체성은 <strong>태양 ${sunSign} ${sun.house}하우스</strong>에 자리해, 삶의 방향성과 근본적인 성격을 이끌어갑니다.</p>
-          <p>정서적 안정의 원천은 <strong>달 ${moonSign} ${moon.house}하우스</strong>에 있으며, 진짜 마음의 편안함을 느끼기 위해 무엇이 필요한지를 보여줍니다.</p>
-        `;
-        document.getElementById('reportCareer').innerHTML = `
-          <p>사회적 성취와 평판의 정점을 나타내는 <strong>MC는 ${mcSign}</strong>에 위치해, 어떤 방향에서 성과가 인정받기 쉬운지를 보여줍니다.</p>
-          <p>실행력과 추진력은 <strong>화성 ${marsSign} ${mars.house}하우스</strong>${mars.isRx ? ' [역행 ℞]' : ''}에서 발현되며, 일을 밀어붙이는 방식과 마찰이 생길 수 있는 지점을 시사합니다.</p>
-        `;
-        document.getElementById('reportWealth').innerHTML = `
-          <p>물질적 성장의 통로는 <strong>포춘 ${fortuneSign} ${h2.house}하우스</strong>에 있고, 장기적인 구조와 인내는 <strong>토성 ${currentLang === 'en' ? saturn.sign.en : saturn.sign.kor} ${saturn.house}하우스</strong>${saturn.isRx ? ' [역행 ℞]' : ''}가 다져줍니다.</p>
-          <p>이 조합은 꾸준하고 절제된 노력이 시간이 지나며 복리처럼 쌓이는 지점을 알려줍니다.</p>
-        `;
-        document.getElementById('reportLove').innerHTML = `
-          <p>연애 스타일과 관계의 가치관은 <strong>금성 ${venusSign} ${venus.house}하우스</strong>${venus.isRx ? ' [역행 ℞]' : ''}에 담겨 있어, 무엇에 끌리고 애정을 어떻게 표현하는지를 보여줍니다.</p>
-        `;
-        document.getElementById('reportKarma').innerHTML = `
-          <p>영혼이 성장해야 할 방향은 <strong>${nodeSign} 북노드(평균)</strong>가 가리키며, 남노드는 이미 익숙해진 패턴을 나타냅니다. 위에서 살펴본 토성의 배치는 이 성장을 꾸준한 성취로 다지기 위해 필요한 훈련을 보여줍니다.</p>
-        `;
+    // 한글 받침 유무로 조사를 자동 선택: J('달','은/는') -> '달은', J('금성','은/는') -> '금성은'
+    function J(word, pair){
+      const w = String(word == null ? '' : word).trim();
+      const [withBatchim, noBatchim] = pair.split('/');
+      const c = w.charCodeAt(w.length - 1);
+      if (c >= 0xAC00 && c <= 0xD7A3) {
+        const jong = (c - 0xAC00) % 28;
+        if (pair === '으로/로') return w + (jong === 0 || jong === 8 ? '로' : '으로');
+        return w + (jong === 0 ? noBatchim : withBatchim);
       }
+      return w + noBatchim;
     }
 
-    async function typeWriterEffect(element, htmlText, speed = 8) {
+    function isEn(){ return currentLang === 'en'; }
+    function nm(k){ return ALL_PLANET_METAS[k].name[currentLang]; }
+    function sIdx(b){ return ZODIAC_SIGNS.findIndex(z => z.name === b.sign.name); }
+    function sgn(b){ return isEn() ? b.sign.en : b.sign.kor; }
+    function stI(i){ return SG[i][isEn() ? 3 : 1]; }
+    function shI(i){ return SG[i][isEn() ? 4 : 2]; }
+    function hsT(h){ return HS[h - 1][isEn() ? 1 : 0]; }
+
+    function dg(k, b){
+      const d = DIG[k]; if (!d) return '';
+      const i = sIdx(b); let t = null;
+      if (d[0].includes(i)) t = 'dom';
+      else if (d[1] === i) t = 'ex';
+      else if (d[0].some(x => (x + 6) % 12 === i)) t = 'det';
+      else if ((d[1] + 6) % 12 === i) t = 'fall';
+      return t ? DIGT[t][isEn() ? 1 : 0] + ' ' : '';
+    }
+
+    function aspectsOf(chart, key, max = 2){
+      if (!ASPK.includes(key)) return [];
+      const res = [];
+      ASPK.forEach(o => {
+        if (o === key) return;
+        let d = Math.abs(chart.bodies[key].rawDeg - chart.bodies[o].rawDeg) % 360;
+        if (d > 180) d = 360 - d;
+        ASPD.forEach(a => { const orb = Math.abs(d - a[0]); if (orb <= a[1]) res.push({ o, a, orb }); });
+      });
+      return res.sort((x, y) => x.orb - y.orb).slice(0, max);
+    }
+    function aspText(chart, key, max = 2){
+      return aspectsOf(chart, key, max).map(r => isEn()
+        ? `${nm(key)} and ${nm(r.o)} ${r.a[3]}.`
+        : `${J(nm(key),'과/와')} ${J(nm(r.o),'은/는')} ${r.a[2]}.`).join(' ');
+    }
+
+    function planetInsight(key, b){
+      const en = isEn(), i = sIdx(b), meta = ALL_PLANET_METAS[key];
+      const dom = en ? meta.domainEn : meta.domain;
+      const asp = aspText(lastCalculatedChart, key, 2);
+      const rx = b.isRx ? (en ? 'It is retrograde, so its energy goes inward first. It looks slower on the outside, but it grows deeper.' : '지금은 역행 중이라 에너지가 먼저 안쪽으로 들어가요. 겉으론 느려 보여도 그만큼 깊어진다냥.') : '';
+      if (en) return {
+        strength: `${nm(key)} takes care of ${dom}. In ${sgn(b)} it shows up in a ${stI(i)} style. ${dg(key, b)}${asp}`,
+        shadow: `Just watch out for ${shI(i)}! ${rx}`,
+        action: `The ${b.house}th House (${hsT(b.house)}) is this planet's stage! Bring out the best of ${sgn(b)} there on purpose, and keep the shaky part in check with a small note or routine 🐾`
+      };
+      return {
+        strength: `${J(nm(key),'은/는')} ${J(dom,'을/를')} 담당하는 별이다냥. ${sgn(b)}에 있어서 ${stI(i)} 스타일로 나타나요. ${dg(key, b)}${asp}`,
+        shadow: `다만 ${J(shI(i),'은/는')} 조심하라냥! ${rx}`,
+        action: `${b.house}하우스(${hsT(b.house)})가 이 별의 무대다냥! 그쪽에서 ${sgn(b)}의 장점을 일부러 꺼내 쓰고, 약한 부분은 메모나 루틴으로 슬쩍 챙겨보라냥 🐾`
+      };
+    }
+
+    function renderRichReports(chart){
+      const en = isEn(), B = chart.bodies;
+      const ai = ZODIAC_SIGNS.findIndex(z => z.name === chart.angles.asc.sign.name);
+      const hi = h => (ai + h - 1) % 12;
+      const hn = h => en ? ZODIAC_SIGNS[hi(h)].en : ZODIAC_SIGNS[hi(h)].kor;
+      const P = arr => arr.filter(Boolean).map(x => `<p>${x}</p>`).join('');
+      const T = (ko, e) => en ? e : ko;
+
+      const ln = (k, role) => { const b = B[k], i = sIdx(b); return en
+        ? `<strong>${nm(k)} · ${sgn(b)} · ${b.house}H</strong> — ${role}! A ${stI(i)} style that shows up around ${hsT(b.house)}. ${dg(k, b)}Just watch out for ${shI(i)}. ${aspText(chart, k, 1)}`
+        : `<strong>${nm(k)} · ${sgn(b)} · ${b.house}하우스</strong> — ${role}! ${stI(i)} 스타일이고, ${hsT(b.house)} 쪽에서 티가 난다냥. ${dg(k, b)}다만 ${J(shI(i),'은/는')} 조심! ${aspText(chart, k, 1)}`; };
+
+      const hl = (h, role) => {
+        const i = hi(h), r = B[SG[i][0]];
+        const occ = Object.values(B).filter(b => b.house === h && ASPK.includes(b.key) && b.key !== 'node').map(b => nm(b.key)).join(', ');
+        return en
+          ? `<strong>${h}th House · ${hn(h)}</strong> — ${role}! It runs in a ${stI(i)} style. ${occ ? 'Living here: ' + occ + '. ' : 'Nobody lives here right now, so the house ruler speaks for it. '}The ruler ${nm(r.key)} sits in the ${r.house}th House (${hsT(r.house)}), so that is where the key is hiding.`
+          : `<strong>${h}하우스 · ${hn(h)}</strong> — ${role}! ${stI(i)} 스타일로 굴러가요. ${occ ? '여기엔 ' + J(occ,'이/가') + ' 살고 있어요. ' : '지금은 빈집이라 집주인(지배성)이 대신 이야기해요. '}집주인 ${J(nm(r.key),'은/는')} ${r.house}하우스(${hsT(r.house)})에 있어서, 이 영역의 열쇠는 거기에 있다냥.`;
+      };
+
+      const ang = (k, label, role) => {
+        const a = chart.angles[k], i = ZODIAC_SIGNS.findIndex(z => z.name === a.sign.name);
+        return en
+          ? `<strong>${label} · ${a.sign.en}</strong> — ${role}! It has a ${stI(i)} vibe. Just watch out for ${shI(i)}.`
+          : `<strong>${label} · ${a.sign.kor}</strong> — ${role}! ${stI(i)} 분위기예요. 다만 ${J(shI(i),'은/는')} 조심!`;
+      };
+
+      const cnt = [0, 0, 0, 0];
+      ['sun','moon','mercury','venus','mars','jupiter','saturn','uranus','neptune','pluto'].forEach(k => cnt[sIdx(B[k]) % 4]++);
+      const top = cnt.indexOf(Math.max(...cnt)), low = cnt.indexOf(Math.min(...cnt));
+      const elL = en
+        ? `Element mix: ${ELS.map((e, i) => e[1] + ' ' + cnt[i]).join(' / ')}. ${ELS[top][1]} is the strongest, so your usual reactions have that color. If you feed the weakest one (${ELS[low][1]}) on purpose, you will feel more balanced!`
+        : `원소 분포는 ${ELS.map((e, i) => e[0] + ' ' + cnt[i]).join(' / ')}이에요. ${ELS[top][0]} 기운이 제일 세서 평소 반응이 이 색깔로 물든다냥. 제일 약한 ${ELS[low][0]} 기운을 일부러 채워주면 균형이 잡혀요!`;
+
+      const ru = B[SG[ai][0]];
+      const rl = en
+        ? `<strong>Chart ruler ${nm(ru.key)} · ${sgn(ru)} · ${ru.house}H</strong> — your life's GPS is pointing toward ${hsT(ru.house)}!`
+        : `<strong>대장별(차트 룰러) ${nm(ru.key)} · ${sgn(ru)} · ${ru.house}하우스</strong> — 내 인생 내비게이션이 ${hsT(ru.house)} 쪽을 가리키고 있다냥!`;
+
+      const set = (id, html) => { document.getElementById(id).innerHTML = html; };
+      set('reportSelf', P([ang('asc', T('상승점','ASC'), T('첫인상과 사회적 얼굴','first impression and public face')), ln('sun', T('나다운 중심','the core of who you are')), ln('moon', T('마음이 편해지는 조건','what makes you feel safe')), rl, elL]));
+      set('reportCareer', P([ang('mc', 'MC', T('사회에서 빛나는 방향','where you shine in public')), hl(10, T('커리어 무대','career stage')), ln('mars', T('밀고 나가는 방식','how you push forward')), ln('saturn', T('꾸준히 쌓아가는 힘','your slow-and-steady strength')), ln('mercury', T('일할 때 말하고 배우는 방식','how you talk and learn at work'))]));
+      set('reportWealth', P([hl(2, T('돈 버는 방식과 나의 가치','how you earn and what you value in yourself')), hl(8, T('공동 자산·투자·빚','shared money, investments and debt')), ln('fortune', T('행운이 흘러들어오는 길','where luck flows in')), ln('jupiter', T('기회가 커지는 곳','where opportunities grow')), ln('venus', T('가치관과 소비 취향','your values and spending taste'))]));
+      set('reportLove', P([hl(7, T('파트너와 만나는 무대','where you meet your partner')), ln('venus', T('끌리는 사랑 스타일','your love style')), ln('mars', T('마음이 불붙는 방식','what sparks your fire')), ln('saturn', T('관계에서 배우는 것','what relationships teach you'))]));
+      set('reportKarma', P([ln('node', T('영혼이 향하는 방향','where your soul is heading')), ln('south_node', T('익숙해서 놓기 힘든 습관','the cozy old habit that is hard to drop')), ln('saturn', T('시간 들여 키워갈 부분','what you will grow slowly over time')), hl(12, T('무의식과 쉬어가는 곳','your unconscious and resting spot')), ln('lilith', T('숨겨둔 야생 본능','your hidden wild side'))]));
+    }
+
+    function generateDeepFiveReports(chart) {
+      renderSoulCatCard(chart);
+      renderAllPlanetsDashboard(chart);
+      renderRichReports(chart);
+    }
+
+    // 타자 효과: 제목 정규식 정리(중첩 <strong> 방지, 오타 수정)
+    async function typeWriterEffect(element, htmlText, speed = 6) {
       element.innerHTML = "";
       element.classList.add('typing-cursor');
-      
-      let formattedHtml = htmlText
-        .replace(/(1\.\s*궤도 분석|1\.\s*Orbital Analysis)/g, '<strong>$1</strong>')
-        .replace(/(2\.\s*우주적 판정|2\.\s*Cosmic Judgment)/g, '<br><br><strong>$1</strong>')
-        .replace(/(3\.\s*실전 솔루션|3\.\s*Practical Solution)/g, '<br><br><strong>$1</strong>');
+
+      // 1) "### " 마크다운 기호 제거
+      // 2) 3단 구조 제목을 한 번만 굵게 처리 (1번은 그대로, 2·3번은 앞에 줄바꿈)
+      const formattedHtml = htmlText
+        .replace(/#{1,4}\s*/g, '')
+        .replace(/(1\.\s*(?:궤도 분석|Orbital Analysis))/g, '<strong>$1</strong>')
+        .replace(/(?:<br>\s*)*(2\.\s*(?:우주적 판정|Cosmic Judgment))/g, '<br><br><strong>$1</strong>')
+        .replace(/(?:<br>\s*)*(3\.\s*(?:실전 솔루션|Practical Solution))/g, '<br><br><strong>$1</strong>');
 
       let i = 0;
       let isTag = false;
       let currentString = "";
 
       while (i < formattedHtml.length) {
-        let char = formattedHtml[i];
+        const char = formattedHtml[i];
         if (char === '<') {
           isTag = true;
           currentString += char;
@@ -1255,10 +1276,8 @@ Rule 2 (General/Irrelevant Questions): Start with [ASTRO_INVALID], refund credit
           currentString += char;
           element.innerHTML = currentString;
         } else {
-          if (isTag) {
-            currentString += char;
-          } else {
-            currentString += char;
+          currentString += char;
+          if (!isTag) {
             element.innerHTML = currentString + '<span>▋</span>';
             await new Promise(resolve => setTimeout(resolve, speed));
           }
@@ -1277,26 +1296,38 @@ Rule 2 (General/Irrelevant Questions): Start with [ASTRO_INVALID], refund credit
       renderSelectedCityLabel();
       checkAndInitDailyCredits();
 
-      let catClickCount = 0;
-      let catClickTimer = null;
+      // 비밀 개발자 모드: 냥이 아이콘 3번 클릭 → 토큰 입력 (비우면 해제)
+      let secretClicks = 0, secretTimer = null;
       document.getElementById('secretCatIcon').addEventListener('click', () => {
-        catClickCount += 1;
-        clearTimeout(catClickTimer);
-        catClickTimer = setTimeout(() => { catClickCount = 0; }, 1000);
-        if (catClickCount >= 3) {
-          catClickCount = 0;
-          document.getElementById('inputGeminiKey').value = getGeminiKey();
-          document.getElementById('geminiModal').classList.remove('hidden');
+        secretClicks += 1;
+        clearTimeout(secretTimer);
+        secretTimer = setTimeout(() => { secretClicks = 0; }, 1000);
+        if (secretClicks >= 3) {
+          secretClicks = 0;
+          const v = prompt('Dev token (empty = off)');
+          if (v === null) return;
+          if (v.trim()) localStorage.setItem('meow_dev_token', v.trim());
+          else localStorage.removeItem('meow_dev_token');
+          updateCreditDisplay();
         }
       });
+
 
       document.getElementById('astroForm').addEventListener('submit', (e) => {
         e.preventDefault();
 
         if (typeof Astronomy === 'undefined' || typeof luxon === 'undefined') {
           alert(currentLang === 'en'
-            ? 'Astronomy engine failed to load (check network/CDN access) — cannot calculate an accurate chart.'
-            : '천문 계산 엔진 로드에 실패했습니다 (네트워크/CDN 접근 확인 필요) — 정확한 차트를 계산할 수 없습니다.');
+            ? 'Astronomy engine failed to load (check ./vendor files) — cannot calculate an accurate chart.'
+            : '천문 계산 엔진 로드에 실패했습니다 (./vendor 폴더 파일 확인 필요) — 정확한 차트를 계산할 수 없습니다.');
+          return;
+        }
+
+        const pendingCity = document.getElementById('citySearchInput').value.trim();
+        if (pendingCity) {
+          alert(currentLang === 'en'
+            ? 'You typed a city but did not select it from the list. Please click a suggestion first.'
+            : `도시 "${pendingCity}"를 검색만 하고 목록에서 선택하지 않았어요. 아래 목록에서 도시를 클릭해 주세요.`);
           return;
         }
 
@@ -1304,7 +1335,7 @@ Rule 2 (General/Irrelevant Questions): Start with [ASTRO_INVALID], refund credit
         const birthDate = document.getElementById('birthDate').value;
         const hour12 = parseInt(document.getElementById('birthHour').value, 10);
         const minute = parseInt(document.getElementById('birthMinute').value, 10);
-        const meridiem = document.getElementById('birthMeridiem').value;
+        const meridiem = (document.getElementById('birthMeridiem').value || 'am').toLowerCase();
         const time24 = convert12HourTo24Hour(hour12, minute, meridiem);
 
         if (!birthDate) {
@@ -1320,12 +1351,6 @@ Rule 2 (General/Irrelevant Questions): Start with [ASTRO_INVALID], refund credit
         const hour = time24.hour;
         const minute24 = time24.minute;
 
-        if (rawName.toLowerCase() === 'cosmos') {
-          setDeveloperMode(true);
-          alert(currentLang === 'en' ? '🪐 [Dev Cheat Activated] Unlimited Tuna Cans (∞)!' : '🪐 [개발자 치트 활성화] 참치캔 무제한(∞)!');
-        } else {
-          setDeveloperMode(false);
-        }
 
         const btnCalculate = document.getElementById('btnCalculate');
         const btnCalculateText = document.getElementById('btnCalculateText');
@@ -1354,6 +1379,7 @@ Rule 2 (General/Irrelevant Questions): Start with [ASTRO_INVALID], refund credit
         }
 
         lastCalculatedChart = chart;
+        currentProfileName = name;
         currentNatalContext = buildAstroContextString(name, chart, currentSelectedCity);
 
         const sunSign = currentLang === 'en' ? chart.bodies.sun.sign.en : chart.bodies.sun.sign.kor;
@@ -1375,14 +1401,11 @@ Rule 2 (General/Irrelevant Questions): Start with [ASTRO_INVALID], refund credit
         const query = input.value.trim();
         if (!query) return;
 
+        // 이미 답변 생성 중이면 중복 전송 방지
+        if (document.getElementById('btnSend').disabled) return;
+
         if (!currentNatalContext) {
           alert(currentLang === 'en' ? 'Please enter birth details and calculate chart first 🐾' : '먼저 출생 정보를 입력하고 [홀사인 차트 계산]을 눌러주세요 🐾');
-          return;
-        }
-        const apiKey = getGeminiKey();
-        if (!apiKey) {
-          alert(currentLang === 'en' ? 'Gemini API Key missing. Triple-click the top-left cosmic cat icon!' : 'Gemini API Key가 등록되지 않았습니다. 좌측 상단 우주 냥이 아이콘을 3번 클릭하여 키를 등록해주세요!');
-          document.getElementById('geminiModal').classList.remove('hidden');
           return;
         }
 
@@ -1396,7 +1419,7 @@ Rule 2 (General/Irrelevant Questions): Start with [ASTRO_INVALID], refund credit
         const box = document.getElementById('chatBox');
         const userDiv = document.createElement('div');
         userDiv.className = 'flex items-start gap-2.5 justify-end';
-        userDiv.innerHTML = `<div class="bg-gradient-to-r from-pink-500 to-indigo-600 text-white font-semibold p-3.5 rounded-2xl rounded-tr-none max-w-[85%] leading-relaxed shadow">${query}</div><div class="w-8 h-8 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center text-xs font-bold shrink-0">🐾</div>`;
+        userDiv.innerHTML = `<div class="bg-gradient-to-r from-pink-500 to-indigo-600 text-white font-semibold p-3.5 rounded-2xl rounded-tr-none max-w-[85%] leading-relaxed shadow">${escapeHtml(query)}</div><div class="w-8 h-8 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center text-xs font-bold shrink-0">🐾</div>`;
         box.appendChild(userDiv);
         input.value = '';
         chatConversationHistory.push({ role: 'user', text: query });
@@ -1412,19 +1435,27 @@ Rule 2 (General/Irrelevant Questions): Start with [ASTRO_INVALID], refund credit
         btnSend.disabled = true;
 
         try {
-          const sysPrompt = buildSystemInstruction(currentNatalContext);
-          const reply = await requestGeminiChat(apiKey, sysPrompt, chatConversationHistory);
-          let displayTxt = reply.replace(/\[ASTRO_VALID\]/g, '').replace(/\[ASTRO_INVALID\]/g, '').trim();
-          let formatted = displayTxt.replace(/\*\*(.*?)\*\*/g, '<strong class="text-pink-200 font-bold">$1</strong>');
-          let htmlResult = formatted.replace(/\n+/g, '<br>');
-          
-          await typeWriterEffect(botContentEl, htmlResult, 8);
+          const { text: reply, valid, truncated } = await requestChat(chatConversationHistory);
 
-          if (reply.includes('[ASTRO_INVALID]')) updateUserCredits(1);
+          const formatted = escapeHtml(reply).replace(/\*\*(.*?)\*\*/g, '<strong class="text-pink-200 font-bold">$1</strong>');
+          let htmlResult = formatted.replace(/\n+/g, '<br>');
+          if (truncated) {
+            htmlResult += `<br><br><span class="text-amber-300 text-xs">${TRANSLATIONS[currentLang].truncatedNotice}</span>`;
+          }
+
+          await typeWriterEffect(botContentEl, htmlResult, 6);
+
+          if (!valid) updateUserCredits(1);
           chatConversationHistory.push({ role: 'model', text: reply });
         } catch (err) {
-          botContentEl.innerHTML = `<span class="text-rose-400 font-bold">[Error]</span> ${err.message}`;
+          const en = currentLang === 'en';
+          const msgs = {
+            global_limit: en ? 'Today the cosmic cat is exhausted 😿 See you tomorrow! 🐾' : '오늘은 냥이가 너무 지쳤어요 😿 내일 다시 만나요 🐾',
+            ip_limit: en ? 'You asked a lot today! Come back tomorrow 🐾' : '오늘 질문을 많이 하셨어요! 내일 또 만나요 🐾'
+          };
+          botContentEl.innerHTML = msgs[err.code] || (en ? 'Oops, the cosmic signal dropped for a moment 🐾' : '앗, 우주 통신이 잠깐 끊겼다냥 🐾');
           updateUserCredits(1);
+          chatConversationHistory.pop();
         }
         box.scrollTop = box.scrollHeight;
         btnSend.disabled = false;
@@ -1437,7 +1468,7 @@ Rule 2 (General/Irrelevant Questions): Start with [ASTRO_INVALID], refund credit
             return;
           }
           document.getElementById('userInput').value = btn.textContent.trim().replace(/^[^\s]+\s/, '');
-          document.getElementById('chatForm').dispatchEvent(new Event('submit'));
+          document.getElementById('chatForm').dispatchEvent(new Event('submit', { cancelable: true }));
         });
       });
 
@@ -1477,25 +1508,7 @@ Rule 2 (General/Irrelevant Questions): Start with [ASTRO_INVALID], refund credit
         adModal.classList.add('hidden');
       });
 
-      document.getElementById('btnCloseGeminiModal').addEventListener('click', () => {
-        document.getElementById('geminiModal').classList.add('hidden');
-      });
 
-      document.getElementById('btnSaveGeminiKey').addEventListener('click', () => {
-        const val = document.getElementById('inputGeminiKey').value.trim();
-        if (val) {
-          localStorage.setItem(GEMINI_KEY_STORAGE, val);
-          alert(currentLang === 'en' ? 'API Key saved 🐾' : 'API Key 저장 완료 🐾');
-        }
-        document.getElementById('geminiModal').classList.add('hidden');
-      });
-
-      document.getElementById('btnRemoveGeminiKey').addEventListener('click', () => {
-        localStorage.removeItem(GEMINI_KEY_STORAGE);
-        document.getElementById('inputGeminiKey').value = '';
-        alert(currentLang === 'en' ? 'API Key removed' : 'API Key 삭제됨');
-        document.getElementById('geminiModal').classList.add('hidden');
-      });
     });
   </script>
 </body>
