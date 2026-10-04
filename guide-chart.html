@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>출생 차트 읽는 법: 빅3·행성·하우스·각도 기초 | 냥스트로 MeowAstro</title>
+<meta name="description" content="출생 차트(네이탈 차트)를 처음 보는 분을 위한 안내. 태양·달·상승점, 행성, 홀사인 하우스, 어스펙트, 역행, 정확도 체크리스트를 쉽게 설명합니다." />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  html { font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif; word-break: keep-all; overflow-wrap: anywhere; }
+  body { margin: 0; color: #e2e8f0; background: radial-gradient(circle at 50% 10%, #1e1b4b 0%, #0f172a 55%, #030712 100%); background-attachment: fixed; min-height: 100vh; line-height: 1.85; font-size: 15px; }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 24px 16px 40px; }
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 22px; }
+  .brand { color: #f9a8d4; font-weight: 900; font-size: 20px; text-decoration: none; }
+  .home { font-size: 12px; font-weight: 700; color: #fff; text-decoration: none; padding: 8px 14px; border-radius: 14px; background: linear-gradient(90deg, #ec4899, #6366f1); }
+  article { background: rgba(15,23,42,.88); border: 1px solid rgba(99,102,241,.3); border-radius: 24px; padding: 28px 22px; box-shadow: 0 0 40px rgba(129,140,248,.12); }
+  h1 { margin: 0 0 6px; font-size: 26px; line-height: 1.35; background: linear-gradient(90deg, #f9a8d4, #d8b4fe, #fde68a); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lead { color: #94a3b8; font-size: 13px; margin: 0 0 22px; }
+  h2 { font-size: 18px; color: #c7d2fe; margin: 32px 0 8px; padding-bottom: 6px; border-bottom: 1px solid rgba(99,102,241,.25); }
+  h3 { font-size: 15px; color: #fcd34d; margin: 20px 0 4px; }
+  p { margin: 8px 0; color: #cbd5e1; }
+  ul, ol { padding-left: 20px; color: #cbd5e1; } li { margin: 4px 0; }
+  a { color: #f9a8d4; }
+  strong { color: #f1f5f9; }
+  .box { background: rgba(2,6,23,.6); border: 1px solid rgba(99,102,241,.25); border-radius: 16px; padding: 12px 16px; margin: 14px 0; font-size: 14px; }
+  .warn { border-color: rgba(251,191,36,.4); color: #fde68a; }
+  .scroll { overflow-x: auto; margin: 12px 0; }
+  table { border-collapse: collapse; width: 100%; min-width: 520px; font-size: 13px; }
+  th, td { border: 1px solid rgba(99,102,241,.25); padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: rgba(49,46,129,.45); color: #c7d2fe; white-space: nowrap; }
+  .grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 12px; }
+  @media (min-width: 640px) { .grid { grid-template-columns: 1fr 1fr; } article { padding: 36px 36px; } }
+  .card { background: rgba(2,6,23,.65); border: 1px solid rgba(99,102,241,.28); border-radius: 18px; padding: 14px 16px; }
+  .card h3 { margin: 0 0 2px; font-size: 16px; color: #f9a8d4; }
+  .meta { font-size: 11px; color: #a5b4fc; margin-bottom: 6px; }
+  .card p { font-size: 13px; margin: 4px 0; }
+  .toc { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 8px; padding: 0; list-style: none; }
+  .toc a { font-size: 12px; text-decoration: none; padding: 4px 10px; border-radius: 12px; border: 1px solid rgba(99,102,241,.35); color: #c7d2fe; display: inline-block; }
+  footer { margin-top: 26px; text-align: center; font-size: 12px; color: #94a3b8; }
+  footer nav { display: flex; flex-wrap: wrap; gap: 6px 16px; justify-content: center; margin-bottom: 8px; }
+  footer a { color: #94a3b8; text-decoration: none; font-weight: 600; } footer a.on, footer a:hover { color: #f9a8d4; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><a class="brand" href="./index.html">🪐🐱 MeowAstro</a><a class="home" href="./index.html">내 차트 보러 가기 →</a></div>
+  <article>
+
+    <h1>출생 차트(네이탈 차트) 읽는 법</h1>
+    <p class="lead">처음 출생 차트를 보는 분을 위한 기초 안내서 · 최종 수정 2026년 10월 4일</p>
+    <p>출생 차트(네이탈 차트)는 내가 태어난 순간, 태어난 장소에서 올려다본 하늘의 모습을 기호로 옮긴 지도입니다. 냥스트로는 천문 계산 엔진으로 행성의 실제 위치를 계산한 뒤, 그 배치를 쉬운 말로 풀어 보여 드립니다. 이 글을 읽고 나면 결과 화면의 카드와 리포트가 무엇을 뜻하는지 스스로 해석할 수 있습니다.</p>
+    <ul class="toc"><li><a href="#big3">빅3</a></li><li><a href="#planets">행성</a></li><li><a href="#signs">별자리</a></li><li><a href="#houses">하우스</a></li><li><a href="#aspects">각도</a></li><li><a href="#rx">역행</a></li><li><a href="#tips">정확도</a></li><li><a href="#faq">FAQ</a></li></ul>
+
+    <h2 id="big3">1. 먼저 볼 세 가지: 태양 · 달 · 상승점</h2>
+    <p>차트 전체를 한 번에 이해하기 어렵다면 <strong>빅3</strong>부터 보세요. 결과 화면 상단의 세 카드가 바로 이것입니다.</p>
+    <ul>
+      <li><strong>태양(Sun)</strong>: 내 본질과 삶의 중심. 신문 별자리 운세에서 말하는 "내 별자리"입니다.</li>
+      <li><strong>달(Moon)</strong>: 감정과 무의식. 혼자 있을 때, 편안할 때 드러나는 모습입니다.</li>
+      <li><strong>상승점(ASC)</strong>: 동쪽 지평선에 떠오르던 별자리. 첫인상과 세상을 대하는 기본 태도입니다.</li>
+    </ul>
+    <p>세 가지가 서로 다른 별자리인 경우가 흔합니다. 겉으로는 침착한데(상승점) 속으로는 감정이 풍부하고(달) 목표는 뚜렷한(태양) 식으로, 사람의 여러 얼굴이 나뉘어 나타난 것으로 읽으면 됩니다.</p>
+
+    <h2 id="planets">2. 행성은 "배우", 별자리는 "연기 스타일"</h2>
+    <p>행성은 내 안의 서로 다른 역할을 맡은 배우이고, 별자리는 그 배우가 연기하는 방식입니다. 예를 들어 화성(추진력)이 양자리에 있으면 망설임 없이 달려 나가는 스타일이고, 처녀자리에 있으면 꼼꼼히 준비한 뒤 움직이는 스타일입니다.</p>
+    <div class="scroll"><table><thead><tr><th>천체</th><th>담당 영역</th><th>쉽게 말하면</th></tr></thead><tbody>
+<tr><td>☀️ 태양</td><td>자아·생명력·삶의 중심 방향</td><td>“나는 어떤 사람인가”. 흔히 말하는 내 별자리입니다.</td></tr>
+<tr><td>🌙 달</td><td>무의식·감정·안정감의 조건</td><td>마음이 편해지는 방식, 스트레스 받을 때 나오는 반응.</td></tr>
+<tr><td>☿ 수성</td><td>생각·말투·배우는 방식</td><td>정보를 처리하고 소통하는 스타일.</td></tr>
+<tr><td>♀ 금성</td><td>사랑·취향·가치관</td><td>끌리는 사람과 분위기, 돈을 쓰는 취향.</td></tr>
+<tr><td>♂ 화성</td><td>추진력·열정·분노</td><td>목표를 향해 움직이는 방식과 싸우는 방식.</td></tr>
+<tr><td>♃ 목성</td><td>확장·행운·낙관</td><td>기회가 커지고 배움이 넓어지는 영역.</td></tr>
+<tr><td>♄ 토성</td><td>책임·한계·성숙</td><td>시간이 걸리지만 단단하게 쌓는 부분. 약점이자 훈장.</td></tr>
+<tr><td>♅ 천왕성 · ♆ 해왕성 · ♇ 명왕성</td><td>세대 행성(느리게 움직임)</td><td>같은 해에 태어난 사람들이 공유하는 시대 분위기. 하우스 위치에서 개인차가 납니다.</td></tr>
+<tr><td>☊ 북노드 / ☋ 남노드</td><td>영혼의 성장 방향 / 익숙한 습관</td><td>북노드는 도전해 볼 방향, 남노드는 편하지만 의존하기 쉬운 패턴.</td></tr>
+<tr><td>⚸ 릴리스</td><td>그림자 본능</td><td>억눌러 둔 야성, 타협하기 싫은 부분.</td></tr>
+<tr><td>⊗ 포춘</td><td>물질적 행운의 통로</td><td>태양·달·상승점으로 계산하는 민감점. 출생 시간이 꼭 필요합니다.</td></tr>
+    </tbody></table></div>
+
+    <h2 id="signs">3. 별자리는 원소와 방식으로 묶어서 보기</h2>
+    <p>12별자리는 <strong>원소</strong> 4가지(불·흙·공기·물)와 <strong>방식</strong> 3가지(활동·고정·변통)의 조합입니다. 냥스트로의 5대 리포트 첫 칸에 나오는 "원소 분포"는 내 행성 10개가 어떤 원소에 몰려 있는지를 센 것입니다.</p>
+    <ul>
+      <li><strong>불</strong>(양·사자·사수): 열정과 직관, 행동이 빠름.</li>
+      <li><strong>흙</strong>(황소·처녀·염소): 현실감과 지속력, 눈에 보이는 결과를 중시.</li>
+      <li><strong>공기</strong>(쌍둥이·천칭·물병): 생각과 소통, 관계와 아이디어 중심.</li>
+      <li><strong>물</strong>(게·전갈·물고기): 감정과 공감, 깊이 있는 유대.</li>
+    </ul>
+    <p>가장 약한 원소는 "내가 일부러 채워 주면 균형이 잡히는 영역"으로 보면 실용적입니다. 별자리별 특징은 <a href="./guide-signs.html">12별자리 가이드</a>에서 자세히 볼 수 있습니다.</p>
+
+    <h2 id="houses">4. 하우스: 인생의 12개 무대</h2>
+    <p>별자리가 "어떻게"라면 하우스는 "어디서"입니다. 같은 행성이라도 어느 하우스에 있느냐에 따라 그 에너지가 쓰이는 인생 영역이 달라집니다. 냥스트로는 <strong>홀사인(Whole Sign) 하우스</strong>를 씁니다. 상승점이 있는 별자리 전체를 1하우스로 삼고, 그다음 별자리를 순서대로 2, 3, 4… 하우스로 배정하는 가장 오래되고 단순한 방식입니다.</p>
+    <div class="scroll"><table><thead><tr><th>하우스</th><th>주제</th></tr></thead><tbody>
+<tr><td>1하우스</td><td>나의 이미지·몸·새로운 시작</td></tr>
+<tr><td>2하우스</td><td>돈·소유·나의 가치</td></tr>
+<tr><td>3하우스</td><td>말하기·배움·가까운 사람들</td></tr>
+<tr><td>4하우스</td><td>집·뿌리·마음의 쉼터</td></tr>
+<tr><td>5하우스</td><td>연애·창작·노는 즐거움</td></tr>
+<tr><td>6하우스</td><td>일상 루틴·일·건강</td></tr>
+<tr><td>7하우스</td><td>파트너·계약·가까운 상대</td></tr>
+<tr><td>8하우스</td><td>깊은 유대·공동 자산·변화</td></tr>
+<tr><td>9하우스</td><td>해외·공부·신념</td></tr>
+<tr><td>10하우스</td><td>커리어·사회적 위치</td></tr>
+<tr><td>11하우스</td><td>친구·커뮤니티·미래 목표</td></tr>
+<tr><td>12하우스</td><td>무의식·혼자만의 시간·숨은 일</td></tr>
+    </tbody></table></div>
+    <p>하우스가 비어 있어도 걱정할 필요는 없습니다. 빈 하우스는 그 하우스 별자리의 지배성(집주인)이 어디에 있는지를 보면 됩니다. 리포트에서 "빈집이라 집주인이 대신 이야기해요"라고 나오는 부분이 그 뜻입니다.</p>
+
+    <h2 id="aspects">5. 각도(어스펙트): 행성끼리의 관계</h2>
+    <p>두 행성이 이루는 각도는 둘이 어떻게 협력하거나 충돌하는지를 보여줍니다. 냥스트로는 아래 다섯 가지 주요 각도를 허용 범위(오브) 안에서 찾아 풀이에 반영합니다.</p>
+    <div class="scroll"><table><thead><tr><th>각도</th><th>의미</th></tr></thead><tbody>
+<tr><td>합 (0°)</td><td>두 행성이 한 팀으로 움직이며 에너지가 강해집니다.</td></tr>
+<tr><td>충 (180°)</td><td>서로 마주 보며 균형을 요구합니다. 양극단 사이의 줄다리기.</td></tr>
+<tr><td>삼각 (120°)</td><td>손발이 척척 맞는 편안한 흐름. 다만 노력 없이 흘려보내기 쉽습니다.</td></tr>
+<tr><td>사각 (90°)</td><td>티격태격하며 긴장을 만들고, 그 긴장이 성장 동력이 됩니다.</td></tr>
+<tr><td>육각 (60°)</td><td>살짝만 움직여도 기회가 열리는 가벼운 협력.</td></tr>
+    </tbody></table></div>
+    <p>삼각이 "좋은 것", 사각이 "나쁜 것"은 아닙니다. 편안한 각도는 재능이지만 안주하기 쉽고, 긴장 각도는 불편하지만 성장의 계기가 되는 경우가 많습니다.</p>
+
+    <h2 id="rx">6. 역행(℞)이란?</h2>
+    <p>역행은 지구에서 볼 때 행성이 뒤로 가는 것처럼 보이는 현상입니다. 실제로 행성이 뒤로 가는 것은 아니고 공전 속도 차이로 생기는 착시입니다. 점성술에서는 역행 행성의 에너지가 겉보다 안쪽으로 먼저 향한다고 해석합니다. 느려 보이지만 곱씹고 깊어지는 방식이라는 뜻이고, 약점으로 단정 짓지 않습니다. 태양과 달은 역행하지 않으며, 노드는 평균 노드 기준으로 항상 역행하는 값으로 표시됩니다.</p>
+
+    <h2 id="tips">7. 정확한 차트를 위한 체크리스트</h2>
+    <ul>
+      <li><strong>출생 시간</strong>: 상승점은 약 2시간마다 바뀌고, 하우스는 상승점에 따라 모두 달라집니다. 시간을 모르면 "출생 시간 모름"을 선택하세요. 상승점·MC·하우스를 빼고 행성의 별자리 위주로 풀이합니다. 정오를 기준으로 계산하므로 달은 별자리가 다를 수 있습니다.</li>
+      <li><strong>AM/PM</strong>: 오후 12시는 낮 12시, 오전 12시는 자정입니다.</li>
+      <li><strong>출생 도시</strong>: 가장 가까운 도시를 선택하세요. 위도·경도는 상승점에, 시간대는 UTC 변환에 영향을 줍니다.</li>
+      <li><strong>서머타임</strong>: 지역별 시간대(IANA)를 적용해 서머타임을 반영합니다. 과거 한국의 서머타임(1948~1960년, 1987~1988년)처럼 특수한 시기에 태어났다면 출생 기록의 시각 기준을 확인해 보세요.</li>
+      <li><strong>별자리 경계</strong>: 태어난 날짜가 별자리 바뀌는 날 근처라면 시간까지 정확해야 태양 별자리가 확정됩니다.</li>
+    </ul>
+
+    <h2 id="faq">8. 자주 묻는 질문</h2>
+    <h3>신문에서 본 내 별자리와 다르게 나왔어요.</h3>
+    <p>별자리 경계일은 해마다 하루 정도 달라지고, 경계일에 태어났다면 시각에 따라 갈립니다. 냥스트로는 출생 시각까지 반영해 태양의 실제 위치를 계산합니다. 한편 서양 점성술(트로피컬)은 춘분점을 기준으로 하기 때문에 별이 실제로 놓인 별자리(항성 기준)와도 다릅니다.</p>
+    <h3>다른 사이트 결과와 도수가 조금 달라요.</h3>
+    <p>하우스 방식(홀사인·플라시더스 등), 노드의 종류(평균·진짜), 계산에 쓰는 시각 기준에 따라 도수와 하우스가 달라질 수 있습니다. 냥스트로는 홀사인 하우스와 평균 노드를 기본으로 합니다.</p>
+    <h3>차트 해석은 운명을 알려 주나요?</h3>
+    <p>아닙니다. 점성술은 자기 이해와 대화의 도구로 즐기는 것이 좋습니다. 중요한 결정은 반드시 본인의 판단과 전문가의 조언으로 내리세요. 자세한 내용은 <a href="./terms.html">이용약관·면책</a>을 참고해 주세요.</p>
+
+  </article>
+  <footer>
+    <nav><a href="./guide-chart.html" class="on">차트 읽는 법</a><a href="./guide-signs.html">12별자리 가이드</a><a href="./about.html">소개</a><a href="./privacy.html">개인정보처리방침</a><a href="./terms.html">이용약관·면책</a></nav>
+    <p>본 서비스는 오락·참고용이며 전문적 조언을 대체하지 않습니다. © 2026 MeowAstro 🐾</p>
+  </footer>
+</div>
+</body>
+</html>
