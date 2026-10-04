@@ -125,6 +125,11 @@
                 <option value="pm">PM</option>
               </select>
             </div>
+          <label class="flex items-center gap-2 mt-2 text-[11px] text-slate-300 cursor-pointer select-none">
+            <input type="checkbox" id="birthTimeUnknown" class="accent-pink-500 w-3.5 h-3.5" />
+            <span id="labelTimeUnknownText" data-ko="출생 시간을 몰라요" data-en="I don't know my birth time">출생 시간을 몰라요</span>
+          </label>
+          <p id="timeUnknownHint" class="hidden text-[10px] text-amber-300/90 mt-1 leading-relaxed" data-ko="상승점·MC·하우스는 계산하지 않고, 행성의 별자리 위주로 풀이해요. 정오 기준이라 달은 별자리가 다를 수 있어요." data-en="Ascendant, MC and houses are skipped; the reading uses planet signs only. Noon is assumed, so the Moon sign may differ.">상승점·MC·하우스는 계산하지 않고, 행성의 별자리 위주로 풀이해요. 정오 기준이라 달은 별자리가 다를 수 있어요.</p>
           </div>
         </div>
 
@@ -328,27 +333,19 @@
     </div>
   </div>
 
-  <div id="adModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50">
-    <div class="bg-slate-900 border-2 border-pink-500/40 rounded-3xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl cat-glow">
-      <div class="w-16 h-16 rounded-full bg-pink-500/20 text-pink-400 flex items-center justify-center text-3xl mx-auto floating-cat">🐟</div>
-      <div>
-        <h3 id="adModalTitle" class="text-lg font-black text-white">오늘의 참치캔이 바닥났어요!</h3>
-        <p id="adModalDesc" class="text-xs text-slate-300 mt-1">15초 우주 모의 광고를 시청하면 참치캔 3캔이 즉시 무료 충전됩니다 🐾</p>
-      </div>
-      <div id="adScreen" class="hidden bg-slate-950 rounded-2xl p-4 border border-indigo-500/30 space-y-3">
-        <div class="text-xs text-amber-300 font-bold flex items-center justify-center gap-2">
-          <i class="fa-solid fa-film"></i> <span id="adPlayText">스폰서 모의 광고 재생 중</span> (<span id="adTimer">15</span>s)
-        </div>
-      </div>
-      <div class="flex justify-center gap-2 pt-2">
-        <button id="btnCloseAdModal" class="px-4 py-2.5 bg-slate-800 text-slate-400 hover:text-white rounded-xl text-xs font-bold">닫기</button>
-        <button id="btnStartWatchAd" class="px-5 py-2.5 bg-gradient-to-r from-pink-500 to-indigo-600 text-white rounded-xl text-xs font-black shadow-lg">광고 보고 +3캔 받기</button>
-      </div>
-    </div>
-  </div>
 
 
-  <script>
+    <footer class="max-w-4xl mx-auto mt-10 pb-8 px-3 text-center text-[11px] text-slate-400 space-y-2.5 relative z-10">
+    <nav class="flex flex-wrap justify-center gap-x-4 gap-y-1.5 font-semibold">
+      <a href="./guide-chart.html" class="hover:text-pink-300 transition" data-ko="차트 읽는 법" data-en="How to Read a Chart">차트 읽는 법</a>
+      <a href="./guide-signs.html" class="hover:text-pink-300 transition" data-ko="12별자리 가이드" data-en="12 Zodiac Signs Guide">12별자리 가이드</a>
+      <a href="./about.html" class="hover:text-pink-300 transition" data-ko="소개" data-en="About">소개</a>
+      <a href="./privacy.html" class="hover:text-pink-300 transition" data-ko="개인정보처리방침" data-en="Privacy Policy">개인정보처리방침</a>
+      <a href="./terms.html" class="hover:text-pink-300 transition" data-ko="이용약관·면책" data-en="Terms &amp; Disclaimer">이용약관·면책</a>
+    </nav>
+    <p class="leading-relaxed" data-ko="본 서비스는 오락·참고용이며 의학·법률·재무 등 전문적 조언을 대체하지 않습니다." data-en="For entertainment and reference only. Not a substitute for professional medical, legal or financial advice.">본 서비스는 오락·참고용이며 의학·법률·재무 등 전문적 조언을 대체하지 않습니다.</p>
+    <p class="text-slate-500">© 2026 MeowAstro 🐾</p>
+  </footer><script>
     let currentLang = 'ko';
 
     const TRANSLATIONS = {
@@ -400,12 +397,9 @@
           "🌌 북노드(North Node)와 남노드가 가리키는 영혼의 카르마 탈출구",
           "💰 2하우스와 8하우스로 보는 재물복 및 자산 락인 전략"
         ],
-        adModalTitle: "오늘의 참치캔이 바닥났어요!",
-        adModalDesc: "15초 우주 모의 광고를 시청하면 참치캔 3캔이 즉시 무료 충전됩니다 🐾",
-        adPlayText: "스폰서 모의 광고 재생 중",
-        geminiModalTitle: "[개발자 모드] Gemini API Key 설정",
         cityNotFound: "일치하는 도시를 찾지 못했습니다. 목록에서 선택해주세요.",
-        cityApprox: "(경도 기반 근사 시간대 · 정밀도 낮음)"
+        cityApprox: "(경도 기반 근사 시간대 · 정밀도 낮음)",
+        outOfCans: "오늘의 참치캔을 모두 사용했어요 🐟 내일 다시 5캔이 충전돼요!"
       },
       en: {
         metaTitle: "MeowAstro - Whole Sign Precision Horoscope & Cosmic Cat Consultation",
@@ -455,12 +449,9 @@
           "🌌 Soul karma escape route via North & South Nodes",
           "💰 Wealth fortune & asset lock-in strategy via 2nd & 8th Houses"
         ],
-        adModalTitle: "You ran out of tuna cans!",
-        adModalDesc: "Watch a 15-second cosmic sponsor ad to instantly get 3 free tuna cans 🐾",
-        adPlayText: "Sponsor Ad Playing",
-        geminiModalTitle: "[Developer Mode] Gemini API Key Setup",
         cityNotFound: "No matching city found. Please pick from the list.",
-        cityApprox: "(Longitude-based approx. timezone · lower precision)"
+        cityApprox: "(Longitude-based approx. timezone · lower precision)",
+        outOfCans: "You have used all of today's tuna cans 🐟 They refill to 5 tomorrow!"
       }
     };
 
@@ -493,6 +484,19 @@
       return { hour: hour24, minute: minuteValue, meridiem: period };
     }
 
+    // [수정 7] Big3 카드를 언어에 맞게 다시 그리는 함수
+    function renderBig3(chart) {
+      const en = currentLang === 'en';
+      const unk = !!chart.timeUnknown;
+      const s = chart.bodies.sun, m = chart.bodies.moon, a = chart.angles.asc;
+      const h = b => unk ? '' : ` · ${b.house}H`;
+      document.getElementById('cardSun').textContent  = `${en ? s.sign.en : s.sign.kor} ${s.degStr}${h(s)}`;
+      document.getElementById('cardMoon').textContent = `${unk ? '≈ ' : ''}${en ? m.sign.en : m.sign.kor} ${m.degStr}${h(m)}`;
+      document.getElementById('cardAsc').textContent  = unk
+        ? (en ? 'Birth time needed' : '출생 시간 필요')
+        : `${en ? a.sign.en : a.sign.kor} ${a.degStr}`;
+    }
+
     function switchLanguage(lang) {
       currentLang = lang;
       const t = TRANSLATIONS[lang];
@@ -518,6 +522,7 @@
       document.getElementById('labelBirthTime').textContent = t.labelBirthTime;
       document.getElementById('labelCity').textContent = t.labelCity;
       document.getElementById('labelCurrentCity').textContent = t.labelCurrentCity;
+      document.querySelectorAll('[data-ko]').forEach(el => { el.textContent = el.dataset[lang]; });
 
       document.getElementById('profileName').placeholder = t.namePlaceholder;
       document.getElementById('citySearchInput').placeholder = t.cityPlaceholder;
@@ -549,8 +554,6 @@
       document.getElementById('btnResetText').textContent = t.btnResetText;
       document.getElementById('userInput').placeholder = t.userInputPlaceholder;
       document.getElementById('btnSendText').textContent = t.btnSendText;
-      document.getElementById('adModalTitle').textContent = t.adModalTitle;
-      document.getElementById('adModalDesc').textContent = t.adModalDesc;
 
       const chips = document.querySelectorAll('.quick-chip');
       chips.forEach((chip, idx) => {
@@ -567,6 +570,7 @@
       }
 
       if (lastCalculatedChart) {
+        renderBig3(lastCalculatedChart); // [수정 7] 언어 전환 시 Big3 갱신
         generateDeepFiveReports(lastCalculatedChart);
         if (currentPanelKey) {
           toggleInlinePlanetPanel(currentPanelKey, true);
@@ -877,8 +881,9 @@
       const lilithInfo = lonToSignAndDeg(lilithLon);
       bodies.lilith = { key: 'lilith', sign: lilithInfo.sign, degStr: lilithInfo.degStr, rawDeg: lilithLon, house: houseOfSign(lilithInfo.sign.name), isRx: false };
 
-      const sunHouse = bodies.sun.house;
-      const isDayChart = sunHouse >= 7 && sunHouse <= 12;
+      // [수정 2] 주간/야간 차트: 사인 단위 하우스가 아니라 ASC로부터의 실제 경도 차이로 판정
+      // (태양이 ASC로부터 180° 이상 → 지평선 위 = 낮 차트)
+      const isDayChart = normalizeDeg(bodies.sun.rawDeg - ascLon) >= 180;
       const fortuneLon = isDayChart
         ? normalizeDeg(ascLon + bodies.moon.rawDeg - bodies.sun.rawDeg)
         : normalizeDeg(ascLon + bodies.sun.rawDeg - bodies.moon.rawDeg);
@@ -896,13 +901,19 @@
     }
 
     function buildAstroContextString(name, chart, city) {
+      const unk = !!chart.timeUnknown;
       const lines = [`[Whole Sign Client Chart Data: ${name} / ${city.enName || city.name}]`];
       Object.values(chart.bodies).forEach(b => {
+        if (unk && b.key === 'fortune') return;
         const meta = ALL_PLANET_METAS[b.key] || { name: { en: b.key } };
-        lines.push(`${meta.name.en} in ${b.sign.en} ${b.degStr} in ${b.house}H${b.isRx ? ' [Rx]' : ''}`);
+        lines.push(`${meta.name.en} in ${b.sign.en} ${b.degStr}${unk ? '' : ' in ' + b.house + 'H'}${b.isRx ? ' [Rx]' : ''}`);
       });
-      lines.push(`ASC: ${chart.angles.asc.sign.en} ${chart.angles.asc.degStr}`);
-      lines.push(`MC: ${chart.angles.mc.sign.en} ${chart.angles.mc.degStr}`);
+      if (unk) {
+        lines.push('Birth time unknown (noon used): ASC, MC, houses and Part of Fortune unavailable; Moon position approximate');
+      } else {
+        lines.push(`ASC: ${chart.angles.asc.sign.en} ${chart.angles.asc.degStr}`);
+        lines.push(`MC: ${chart.angles.mc.sign.en} ${chart.angles.mc.degStr}`);
+      }
       return lines.join('\n');
     }
 
@@ -954,9 +965,17 @@
     }
 
     let chatConversationHistory = [];
+    let chatSession = 0; // [수정 8] 새 대화/차트 재계산 시 올려서 진행 중이던 응답을 무효화
     let currentNatalContext = "";
     let currentProfileName = 'User';
     let lastCalculatedChart = null;
+
+    // [수정 4] 히스토리가 항상 user 메시지로 시작하도록 보정
+    function trimHistory(history, max = 6) {
+      const h = history.slice(-max);
+      while (h.length && h[0].role !== 'user') h.shift();
+      return h;
+    }
 
     async function requestChat(history) {
       const devToken = localStorage.getItem('meow_dev_token');
@@ -968,7 +987,7 @@
           cityLabel: currentSelectedCity.enName || currentSelectedCity.name,
           lang: currentLang,
           chartLines: currentNatalContext.split('\n').slice(1),
-          history: history.slice(-6)
+          history: trimHistory(history)
         })
       });
       const data = await res.json().catch(() => ({}));
@@ -1021,7 +1040,7 @@
 
       orderedKeys.forEach(k => {
         const b = chart.bodies[k];
-        if (!b) return;
+        if (!b || (chart.timeUnknown && k === 'fortune')) return;
         const meta = ALL_PLANET_METAS[k];
         const signText = currentLang === 'en' ? b.sign.en : b.sign.kor;
 
@@ -1033,7 +1052,7 @@
             <span class="text-xl group-hover:scale-110 transition">${meta.icon}</span>
             <div class="flex items-center gap-1">
               ${b.isRx ? '<span class="text-[9px] px-1 py-0.2 rounded bg-rose-500/30 text-rose-300 border border-rose-500/40 font-bold">℞</span>' : ''}
-              <span class="text-[10px] font-bold text-slate-400 bg-slate-900 px-1.5 py-0.5 rounded-md">${b.house}H</span>
+              ${chart.timeUnknown ? '' : '<span class="text-[10px] font-bold text-slate-400 bg-slate-900 px-1.5 py-0.5 rounded-md">' + b.house + 'H</span>'}
             </div>
           </div>
           <div class="mt-2 space-y-0.5">
@@ -1063,7 +1082,7 @@
 
       document.getElementById('panelIcon').textContent = meta.icon;
       document.getElementById('panelTitle').textContent = `${meta.name[currentLang]} in ${signText}`;
-      document.getElementById('panelSubtitle').textContent = `${b.house} House (${ASTROLOGY_STANDARD.houseSystem.replace('-', ' ')}) · ${b.degStr}${b.isRx ? ' · Rx' : ''} · [${domainText}]`;
+      document.getElementById('panelSubtitle').textContent = `${lastCalculatedChart.timeUnknown ? '' : b.house + ' House (' + ASTROLOGY_STANDARD.houseSystem.replace('-', ' ') + ') · '}${b.degStr}${b.isRx ? ' · Rx' : ''} · [${domainText}]`;
 
       const ins = planetInsight(key, b);
       document.getElementById('panelStrengths').textContent = ins.strength;
@@ -1145,6 +1164,8 @@
     }
 
     function isEn(){ return currentLang === 'en'; }
+    // [수정 5] 영어 서수 헬퍼: 1st, 2nd, 3rd, 4th, 11th, 12th, 13th ...
+    const ord = n => { const s = ['th', 'st', 'nd', 'rd'], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); };
     function nm(k){ return ALL_PLANET_METAS[k].name[currentLang]; }
     function sIdx(b){ return ZODIAC_SIGNS.findIndex(z => z.name === b.sign.name); }
     function sgn(b){ return isEn() ? b.sign.en : b.sign.kor; }
@@ -1183,16 +1204,17 @@
       const en = isEn(), i = sIdx(b), meta = ALL_PLANET_METAS[key];
       const dom = en ? meta.domainEn : meta.domain;
       const asp = aspText(lastCalculatedChart, key, 2);
+      const unk = !!lastCalculatedChart.timeUnknown;
       const rx = b.isRx ? (en ? 'It is retrograde, so its energy goes inward first. It looks slower on the outside, but it grows deeper.' : '지금은 역행 중이라 에너지가 먼저 안쪽으로 들어가요. 겉으론 느려 보여도 그만큼 깊어진다냥.') : '';
       if (en) return {
         strength: `${nm(key)} takes care of ${dom}. In ${sgn(b)} it shows up in a ${stI(i)} style. ${dg(key, b)}${asp}`,
         shadow: `Just watch out for ${shI(i)}! ${rx}`,
-        action: `The ${b.house}th House (${hsT(b.house)}) is this planet's stage! Bring out the best of ${sgn(b)} there on purpose, and keep the shaky part in check with a small note or routine 🐾`
+        action: unk ? `Birth time is unknown, so the house stage is skipped. Bring out the best of ${sgn(b)} on purpose, and keep the shaky part in check with a small note or routine 🐾` : `The ${ord(b.house)} House (${hsT(b.house)}) is this planet's stage! Bring out the best of ${sgn(b)} there on purpose, and keep the shaky part in check with a small note or routine 🐾`
       };
       return {
         strength: `${J(nm(key),'은/는')} ${J(dom,'을/를')} 담당하는 별이다냥. ${sgn(b)}에 있어서 ${stI(i)} 스타일로 나타나요. ${dg(key, b)}${asp}`,
         shadow: `다만 ${J(shI(i),'은/는')} 조심하라냥! ${rx}`,
-        action: `${b.house}하우스(${hsT(b.house)})가 이 별의 무대다냥! 그쪽에서 ${sgn(b)}의 장점을 일부러 꺼내 쓰고, 약한 부분은 메모나 루틴으로 슬쩍 챙겨보라냥 🐾`
+        action: unk ? `출생 시간을 몰라서 하우스 무대는 건너뛰어요. ${sgn(b)}의 장점을 일부러 꺼내 쓰고, 약한 부분은 메모나 루틴으로 슬쩍 챙겨보라냥 🐾` : `${b.house}하우스(${hsT(b.house)})가 이 별의 무대다냥! 그쪽에서 ${sgn(b)}의 장점을 일부러 꺼내 쓰고, 약한 부분은 메모나 루틴으로 슬쩍 챙겨보라냥 🐾`
       };
     }
 
@@ -1212,7 +1234,7 @@
         const i = hi(h), r = B[SG[i][0]];
         const occ = Object.values(B).filter(b => b.house === h && ASPK.includes(b.key) && b.key !== 'node').map(b => nm(b.key)).join(', ');
         return en
-          ? `<strong>${h}th House · ${hn(h)}</strong> — ${role}! It runs in a ${stI(i)} style. ${occ ? 'Living here: ' + occ + '. ' : 'Nobody lives here right now, so the house ruler speaks for it. '}The ruler ${nm(r.key)} sits in the ${r.house}th House (${hsT(r.house)}), so that is where the key is hiding.`
+          ? `<strong>${ord(h)} House · ${hn(h)}</strong> — ${role}! It runs in a ${stI(i)} style. ${occ ? 'Living here: ' + occ + '. ' : 'Nobody lives here right now, so the house ruler speaks for it. '}The ruler ${nm(r.key)} sits in the ${ord(r.house)} House (${hsT(r.house)}), so that is where the key is hiding.`
           : `<strong>${h}하우스 · ${hn(h)}</strong> — ${role}! ${stI(i)} 스타일로 굴러가요. ${occ ? '여기엔 ' + J(occ,'이/가') + ' 살고 있어요. ' : '지금은 빈집이라 집주인(지배성)이 대신 이야기해요. '}집주인 ${J(nm(r.key),'은/는')} ${r.house}하우스(${hsT(r.house)})에 있어서, 이 영역의 열쇠는 거기에 있다냥.`;
       };
 
@@ -1236,6 +1258,21 @@
         : `<strong>대장별(차트 룰러) ${nm(ru.key)} · ${sgn(ru)} · ${ru.house}하우스</strong> — 내 인생 내비게이션이 ${hsT(ru.house)} 쪽을 가리키고 있다냥!`;
 
       const set = (id, html) => { document.getElementById(id).innerHTML = html; };
+      // 출생 시간을 모를 때: 하우스/ASC/MC 없이 행성의 별자리 위주 리포트
+      if (chart.timeUnknown) {
+        const lnNT = (k, role) => { const b = B[k], i = sIdx(b); return en
+          ? `<strong>${nm(k)} · ${sgn(b)}</strong> — ${role}! A ${stI(i)} style. ${dg(k, b)}Just watch out for ${shI(i)}. ${aspText(chart, k, 1)}`
+          : `<strong>${nm(k)} · ${sgn(b)}</strong> — ${role}! ${stI(i)} 스타일이다냥. ${dg(k, b)}다만 ${J(shI(i),'은/는')} 조심! ${aspText(chart, k, 1)}`; };
+        const note = en
+          ? '<strong>⏰ Birth time unknown</strong> — ASC, MC and houses are skipped, so this reading uses planet signs only. If you were born near a sign change, your Moon sign may differ.'
+          : '<strong>⏰ 출생 시간 모름</strong> — 상승점·MC·하우스는 건너뛰고 행성의 별자리 위주로 풀이해요. 달은 하루에 약 13°씩 움직여서 별자리 경계 근처에 태어났다면 달 위치가 다를 수 있다냥.';
+        set('reportSelf', P([note, lnNT('sun', T('나다운 중심','the core of who you are')), lnNT('moon', T('마음이 편해지는 조건','what makes you feel safe')), elL]));
+        set('reportCareer', P([lnNT('mars', T('밀고 나가는 방식','how you push forward')), lnNT('saturn', T('꾸준히 쌓아가는 힘','your slow-and-steady strength')), lnNT('mercury', T('일할 때 말하고 배우는 방식','how you talk and learn at work'))]));
+        set('reportWealth', P([lnNT('venus', T('가치관과 소비 취향','your values and spending taste')), lnNT('jupiter', T('기회가 커지는 곳','where opportunities grow'))]));
+        set('reportLove', P([lnNT('venus', T('끌리는 사랑 스타일','your love style')), lnNT('mars', T('마음이 불붙는 방식','what sparks your fire')), lnNT('moon', T('애정에서 필요한 안정감','the comfort you need in love')), lnNT('saturn', T('관계에서 배우는 것','what relationships teach you'))]));
+        set('reportKarma', P([lnNT('node', T('영혼이 향하는 방향','where your soul is heading')), lnNT('south_node', T('익숙해서 놓기 힘든 습관','the cozy old habit that is hard to drop')), lnNT('saturn', T('시간 들여 키워갈 부분','what you will grow slowly over time')), lnNT('lilith', T('숨겨둔 야생 본능','your hidden wild side'))]));
+        return;
+      }
       set('reportSelf', P([ang('asc', T('상승점','ASC'), T('첫인상과 사회적 얼굴','first impression and public face')), ln('sun', T('나다운 중심','the core of who you are')), ln('moon', T('마음이 편해지는 조건','what makes you feel safe')), rl, elL]));
       set('reportCareer', P([ang('mc', 'MC', T('사회에서 빛나는 방향','where you shine in public')), hl(10, T('커리어 무대','career stage')), ln('mars', T('밀고 나가는 방식','how you push forward')), ln('saturn', T('꾸준히 쌓아가는 힘','your slow-and-steady strength')), ln('mercury', T('일할 때 말하고 배우는 방식','how you talk and learn at work'))]));
       set('reportWealth', P([hl(2, T('돈 버는 방식과 나의 가치','how you earn and what you value in yourself')), hl(8, T('공동 자산·투자·빚','shared money, investments and debt')), ln('fortune', T('행운이 흘러들어오는 길','where luck flows in')), ln('jupiter', T('기회가 커지는 곳','where opportunities grow')), ln('venus', T('가치관과 소비 취향','your values and spending taste'))]));
@@ -1250,7 +1287,8 @@
     }
 
     // 타자 효과: 제목 정규식 정리(중첩 <strong> 방지, 오타 수정)
-    async function typeWriterEffect(element, htmlText, speed = 6) {
+    // [수정 8] shouldStop: 새 대화 등으로 세션이 바뀌면 즉시 중단
+    async function typeWriterEffect(element, htmlText, speed = 6, shouldStop = null) {
       element.innerHTML = "";
       element.classList.add('typing-cursor');
 
@@ -1267,6 +1305,7 @@
       let currentString = "";
 
       while (i < formattedHtml.length) {
+        if (shouldStop && shouldStop()) return; // [수정 8]
         const char = formattedHtml[i];
         if (char === '<') {
           isTag = true;
@@ -1284,8 +1323,20 @@
         }
         i++;
       }
+      if (shouldStop && shouldStop()) return; // [수정 8]
       element.classList.remove('typing-cursor');
       element.innerHTML = formattedHtml;
+    }
+
+        // "출생 시간 모름" 체크박스: 시간 입력칸 비활성화 + 안내문 표시
+    function initTimeUnknownToggle() {
+      const cb = document.getElementById('birthTimeUnknown');
+      const hint = document.getElementById('timeUnknownHint');
+      const fields = ['birthHour', 'birthMinute', 'birthMeridiem'].map(id => document.getElementById(id));
+      cb.addEventListener('change', () => {
+        fields.forEach(el => { el.disabled = cb.checked; el.classList.toggle('opacity-40', cb.checked); });
+        hint.classList.toggle('hidden', !cb.checked);
+      });
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -1293,6 +1344,7 @@
       document.getElementById('btnLangEn').addEventListener('click', () => switchLanguage('en'));
 
       setupCitySearch();
+      initTimeUnknownToggle();
       renderSelectedCityLabel();
       checkAndInitDailyCredits();
 
@@ -1336,7 +1388,8 @@
         const hour12 = parseInt(document.getElementById('birthHour').value, 10);
         const minute = parseInt(document.getElementById('birthMinute').value, 10);
         const meridiem = (document.getElementById('birthMeridiem').value || 'am').toLowerCase();
-        const time24 = convert12HourTo24Hour(hour12, minute, meridiem);
+        const unknownTime = document.getElementById('birthTimeUnknown').checked;
+        const time24 = unknownTime ? { hour: 12, minute: 0, meridiem: 'pm' } : convert12HourTo24Hour(hour12, minute, meridiem);
 
         if (!birthDate) {
           alert(currentLang === 'en' ? 'Please select your date of birth.' : '생년월일을 선택해주세요.');
@@ -1362,6 +1415,7 @@
         let chart;
         try {
           chart = calculateFullChart(birthDate, hour, minute24, currentSelectedCity);
+          chart.timeUnknown = unknownTime;
         } catch (err) {
           alert((currentLang === 'en' ? 'Chart calculation failed: ' : '차트 계산에 실패했습니다: ') + err.message);
           btnCalculate.disabled = false;
@@ -1372,6 +1426,10 @@
         btnCalculateText.textContent = originalLabel;
 
         const name = rawName || 'User';
+
+        // [수정 8] 차트를 다시 계산하면 대화가 초기화되므로 진행 중이던 응답도 무효화
+        chatSession++;
+        document.getElementById('btnSend').disabled = false;
         chatConversationHistory = [];
         const chatBox = document.getElementById('chatBox');
         if (chatBox) {
@@ -1382,14 +1440,7 @@
         currentProfileName = name;
         currentNatalContext = buildAstroContextString(name, chart, currentSelectedCity);
 
-        const sunSign = currentLang === 'en' ? chart.bodies.sun.sign.en : chart.bodies.sun.sign.kor;
-        const moonSign = currentLang === 'en' ? chart.bodies.moon.sign.en : chart.bodies.moon.sign.kor;
-        const ascSign = currentLang === 'en' ? chart.angles.asc.sign.en : chart.angles.asc.sign.kor;
-
-        document.getElementById('cardSun').textContent = `${sunSign} ${chart.bodies.sun.degStr} · ${chart.bodies.sun.house}H`;
-        document.getElementById('cardMoon').textContent = `${moonSign} ${chart.bodies.moon.degStr} · ${chart.bodies.moon.house}H`;
-        document.getElementById('cardAsc').textContent = `${ascSign} ${chart.angles.asc.degStr}`;
-
+        renderBig3(chart); // [수정 7]
         generateDeepFiveReports(chart);
         document.getElementById('resultSection').classList.remove('hidden');
         document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
@@ -1411,7 +1462,7 @@
 
         const credits = checkAndInitDailyCredits();
         if (!isDeveloperMode() && credits <= 0) {
-          document.getElementById('adModal').classList.remove('hidden');
+          alert(TRANSLATIONS[currentLang].outOfCans);
           return;
         }
         updateUserCredits(-1);
@@ -1434,8 +1485,15 @@
         const btnSend = document.getElementById('btnSend');
         btnSend.disabled = true;
 
+        // [수정 8] 이 요청이 시작된 세션 기록 → 도중에 새 대화/재계산이 일어나면 stale
+        const mySession = chatSession;
+        const isStale = () => mySession !== chatSession;
+
         try {
           const { text: reply, valid, truncated } = await requestChat(chatConversationHistory);
+
+          if (!valid) updateUserCredits(1); // 환불은 세션과 무관하게 처리
+          if (isStale()) return;            // 새 대화로 넘어갔으면 조용히 폐기
 
           const formatted = escapeHtml(reply).replace(/\*\*(.*?)\*\*/g, '<strong class="text-pink-200 font-bold">$1</strong>');
           let htmlResult = formatted.replace(/\n+/g, '<br>');
@@ -1443,22 +1501,27 @@
             htmlResult += `<br><br><span class="text-amber-300 text-xs">${TRANSLATIONS[currentLang].truncatedNotice}</span>`;
           }
 
-          await typeWriterEffect(botContentEl, htmlResult, 6);
+          await typeWriterEffect(botContentEl, htmlResult, 6, isStale);
+          if (isStale()) return;
 
-          if (!valid) updateUserCredits(1);
           chatConversationHistory.push({ role: 'model', text: reply });
         } catch (err) {
+          updateUserCredits(1);
+          if (isStale()) return; // 새 세션의 history를 pop 하지 않도록
+
           const en = currentLang === 'en';
           const msgs = {
             global_limit: en ? 'Today the cosmic cat is exhausted 😿 See you tomorrow! 🐾' : '오늘은 냥이가 너무 지쳤어요 😿 내일 다시 만나요 🐾',
             ip_limit: en ? 'You asked a lot today! Come back tomorrow 🐾' : '오늘 질문을 많이 하셨어요! 내일 또 만나요 🐾'
           };
           botContentEl.innerHTML = msgs[err.code] || (en ? 'Oops, the cosmic signal dropped for a moment 🐾' : '앗, 우주 통신이 잠깐 끊겼다냥 🐾');
-          updateUserCredits(1);
           chatConversationHistory.pop();
+        } finally {
+          if (!isStale()) {
+            box.scrollTop = box.scrollHeight;
+            btnSend.disabled = false;
+          }
         }
-        box.scrollTop = box.scrollHeight;
-        btnSend.disabled = false;
       });
 
       document.querySelectorAll('.quick-chip').forEach(btn => {
@@ -1473,40 +1536,12 @@
       });
 
       document.getElementById('btnResetChat').addEventListener('click', () => {
+        chatSession++;                                        // [수정 8] 진행 중이던 응답 무효화
+        document.getElementById('btnSend').disabled = false;  // [수정 8]
         chatConversationHistory = [];
         document.getElementById('chatBox').innerHTML = `<div class="flex items-start gap-3"><div class="w-8 h-8 rounded-full bg-pink-500/20 text-pink-400 flex items-center justify-center text-sm font-bold shrink-0">🐱</div><div class="bg-slate-800/90 text-slate-200 p-4 rounded-2xl rounded-tl-none max-w-[90%] leading-relaxed shadow-md space-y-2 border border-indigo-900/40"><p>${currentLang === 'en' ? 'Chat reset 🐾' : '대화 초기화 완료 🐾'}</p></div></div>`;
       });
 
-      const adModal = document.getElementById('adModal');
-      const adScreen = document.getElementById('adScreen');
-      const btnStartWatchAd = document.getElementById('btnStartWatchAd');
-      let adTimerInterval = null;
-
-      btnStartWatchAd.addEventListener('click', () => {
-        btnStartWatchAd.disabled = true;
-        adScreen.classList.remove('hidden');
-        let timeLeft = 15;
-        document.getElementById('adTimer').textContent = timeLeft;
-        adTimerInterval = setInterval(() => {
-          timeLeft -= 1;
-          document.getElementById('adTimer').textContent = timeLeft;
-          if (timeLeft <= 0) {
-            clearInterval(adTimerInterval);
-            updateUserCredits(3);
-            alert(currentLang === 'en' ? '🎉 Ad finished! +3 Tuna Cans added 🐾' : '🎉 광고 시청 완료! 참치캔 +3캔 충전 🐾');
-            btnStartWatchAd.disabled = false;
-            adScreen.classList.add('hidden');
-            adModal.classList.add('hidden');
-          }
-        }, 1000);
-      });
-
-      document.getElementById('btnCloseAdModal').addEventListener('click', () => {
-        if (adTimerInterval) clearInterval(adTimerInterval);
-        adScreen.classList.add('hidden');
-        btnStartWatchAd.disabled = false;
-        adModal.classList.add('hidden');
-      });
 
 
     });
